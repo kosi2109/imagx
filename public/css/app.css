@@ -1,0 +1,505 @@
+@import url('./constant.css');
+
+/* nav */
+.nav{
+    color: var(--white);
+    z-index: 1000;
+    height: 120px;
+    background-color: var(--black);
+}
+
+.homeNav{
+    background-color: transparent !important;
+}
+
+.main{
+    padding: 130px 20px 10px 20px;
+}
+
+.logocontainer{
+    z-index: 1001;
+}
+
+.logo{
+    font-family: var(--mainFont);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    letter-spacing: 0.1em;
+}
+
+.logocontainer h3{
+    font-family: var(--mainFont);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.17em;
+}
+
+.leftNav{
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    flex-direction: column;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh !important;
+    align-items: center !important;
+    justify-content: center;
+    background-color: var(--black);
+    transition: opacity 0.5s ease;
+}
+
+.leftNav.open{
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.5s ease;
+}
+
+.nav-links{
+    padding: 0 !important;
+    width: 100%;
+    list-style: none;
+    flex-direction: column;
+    align-items: center !important;
+    height: 50%;
+}
+
+.nav-link{
+    color: var(--white);
+    font-family: var(--secondaryFont);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 23px;
+}
+
+.nav-link:hover{
+    color: var(--white);
+}
+
+.searchBtn{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 40px;  
+    font-size: 20px;
+    color: var(--white);
+}
+
+.burger{
+    z-index: 1001;
+    width: 40px;
+    height: 50px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+}
+
+.burger div{
+    background-color: var(--white);
+    width: 100%;
+    height: 5px;
+    margin: 5px 0;
+}
+
+.line1,.line2,.line3{
+    transition: all 0.5s ease;
+}
+
+.line1.open{
+    transform: rotate(45deg) translateY(13px);
+    transition: all 0.5s ease;
+}
+.line2.open{
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.line3.open{
+    transition: all 0.5s ease;
+    transform: rotate(-45deg) translateY(-13px);
+}
+
+@media screen and (min-width:800px) {
+    .leftNav{
+        position: relative !important;
+        width: 70%;
+        flex-direction: row;
+        height: 100% !important;
+        opacity: 1;
+        pointer-events: all;
+        background-color: inherit;
+        align-items: flex-start !important;
+        justify-content: space-between;
+    }
+    .nav-links{
+        width: 70%;
+        list-style: none;
+        flex-direction: row;
+        align-items: flex-start !important;
+        
+    }
+    .nav-link{
+        font-size: 20px;
+    }
+    .burger{
+        display: none;
+    }
+    .thumbnail{
+        max-height:350px;
+        height: 100%;
+    }
+    
+}
+
+/* end nav */
+/* ---------------------------- */
+/* home page */
+
+.home{
+    width: 100vw;
+    height: 100vh;
+}
+
+.ftImage{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* end home page */
+/* --------------------------- */
+/* schedule page */
+
+
+/* end schedule */
+
+
+
+/* components */
+.movieContainer{
+    width: 100%;
+}
+
+.movieHeader{
+    width: 100%;
+    position: relative;
+    
+}
+
+.movieHeader::before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgb(255,44,31);
+    background: linear-gradient(90deg, rgba(255,44,31,1) 0%, rgba(255,44,31,0) 70%);
+}
+
+.movieName{
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.movieBody{
+    width: 100%;
+}
+
+.movieBody h2{
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 29px;
+}
+
+.movieBody ul li{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.thumbnail{
+    width: 100%;
+    height: 400px;
+}
+
+.timeBridge{
+    width: 80px !important;
+    height: 30px !important;
+    font-size: 15px !important;
+    line-height: 23px !important;
+    outline: none;
+    border: none;
+    background-color: var(--red);
+    color: var(--white);
+    border-radius: 8px;
+}
+
+/* card */
+.card-bd h2{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.card-bd h3{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+
+
+/* ----------------- */
+/* booking */
+
+.movieDetailCard{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.24);
+}
+
+.movieDetailCard div{
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.card-title{
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+}
+
+.card-detail{
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 15px;
+}
+
+
+.dateTitle{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    border-bottom: 1px solid var(--white);
+    padding: 10px 0;
+}
+
+.dateItem{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+}
+
+.date{
+    width: 50px;
+    height: 50px;
+}
+
+.dateItem.active{
+    width: 60%;
+    height: 100%;
+    background-color: var(--green);
+    border-radius: 100%;
+    text-align: center;
+}
+
+.time{
+    width: 100%;
+}
+
+.dateItem.active{
+    background-color: var(--green);
+    border-radius: 5px;
+    width: 100%;
+    padding: 1px !important;
+}
+
+.screen{
+   width: 100%;
+   position: relative;
+   padding: 10px 0;
+   text-align: center;
+   box-shadow: 0px 10px 15px -3px var(--red);
+    -webkit-box-shadow: 0px 10px 15px -3px var(--red);
+    -moz-box-shadow: 0px 10px 15px -3px var(--red);
+}
+
+/* .screen::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 0;
+    left: 0;
+    background-color: var(--red);
+    box-shadow: 1px 100px 21px -3px var(--red);
+    -webkit-box-shadow: 1px 100px 21px -3px var(--red);
+    -moz-box-shadow: 1px 100px 21px -3px var(--red);
+} */
+
+
+.screenText{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: 0.2em;
+}
+
+.left-end-seat{
+    border-right: 1px solid var(--green);
+}
+.right-end-seat{
+    border-left: 1px solid var(--green);
+}
+
+.seatNo{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    margin: 0 !important;
+}
+
+.seat{
+    width: auto;
+    height: auto;
+}
+
+
+/* ---------------- */
+/* input */
+.input{
+    background: #1F1F1F;
+    border: 1px solid #FF2C1F;
+    border-radius: 8px;
+    height: 40px;
+    padding: 10px;
+    outline: none;
+}
+
+.input:focus{
+    outline: 1px solid #FF2C1F;
+}
+
+.authBtn{
+    width: 120px;
+    height: 40px;
+    background: #FF2C1F;
+    border-radius: 6px;
+    color: var(--white);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 23px;
+    border: none;
+    outline: none;
+    align-self: flex-end;
+}
+
+.formChangeText{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.formChangeText a{
+    color: var(--red);
+}
+
+.bookingStep{
+    background-color: var(--green);
+    outline: none;
+    border: none;
+    align-self: center;
+    padding: 5px 10px;
+    color: var(--white);
+    border-radius: 5px;
+}
+
+.curStep{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.curStep span{
+    font-weight: 700;
+}
+
+.total{
+    padding: 5px 0;
+    position: relative;
+}
+
+.total::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid var(--red);
+}
+.total::after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 130%;
+    border-bottom: 2px solid var(--red);
+}
+
+.purchase h3{
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+.total{
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 29px;
+    letter-spacing: 0.1em;
+}
+
+.purchase h4{
+    font-weight: 400;
+    font-size: 1.1rem;
+}
+
+/* ----------------------- */
+/* complete page */
+
+.complete{
+    height: 60vh !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.complete h2{
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 47px;
+    letter-spacing: 0.2em;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.complete h3{
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 35px;
+    letter-spacing: 0.2em;
+    margin-bottom: 1em;
+    text-align: center;
+}
