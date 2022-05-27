@@ -10,9 +10,15 @@
                 <li><a href="/schedule" class="nav-link">Schedule</a></li>
                 <li><a href="/movies" class="nav-link">Movies</a></li>
             </ul>
-            <a href="/login">
-                <button class="btn signinBtn">Login</button>
-            </a>
+            <?php if($_SESSION['auth']) :?>
+                <form action="/logout" method="POST">
+                    <button class="btn signinBtn">Logout</button>
+                </form>
+            <?php else:?>
+                <a href="/login">
+                    <button class="btn signinBtn">Login</button>
+                </a>
+            <?php endif ; ?>
         </div>
         <button id="burger" class="burger">
             <div class="line1"></div>

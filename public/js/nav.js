@@ -10,3 +10,5 @@ burger.addEventListener('click',function(){
     line2.classList.toggle('open');
     line3.classList.toggle('open');
 })
+
+

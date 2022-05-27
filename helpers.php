@@ -20,13 +20,27 @@ function view(string $html,array $params = []) : void
     require_once $path;
 }
 
-function request() : array
+function request(string $variable = null)
 {
     $method = $_SERVER["REQUEST_METHOD"];
-    if($method == "GET" && count($_GET) > 0){
-        return $_GET;
-    }elseif($method == "POST" && count($_POST) > 0){
-        return $_POST;
+    if($variable == null){
+        if($method == "GET" && count($_GET) > 0){
+            $get = array_map(function($g){
+                return htmlspecialchars($g);
+            },$_GET);
+            return $get;
+        }elseif($method == "POST" && count($_POST) > 0){
+            $post = array_map(function($g){
+                return htmlspecialchars($g);
+            },$_POST);
+            return $post;
+        }
+    }else{
+        if($method == "GET" && count($_GET) > 0){
+            return htmlspecialchars($_GET[$variable]);
+        }elseif($method == "POST" && count($_POST) > 0){
+            return htmlspecialchars($_POST[$variable]);
+        }
     }
 }
 
@@ -41,4 +55,24 @@ function asset(string $path) : string
 {
     $path = "../../public/$path" ;
     return $path;
+}
+
+function redirect(?string $uri = '/') : void
+{
+    header("Location: $uri");
+}
+
+function redirectBack(?array $values = []) : void
+{
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+}
+
+function setError ($value)
+{
+    $_SESSION['error'] = $value;
+}
+
+function error ($key)
+{
+    return $_SESSION['error'][$key];
 }

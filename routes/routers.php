@@ -13,5 +13,10 @@ Route::get('/movies',[MovieController::class,'index']);
 Route::get('/bookings/step1',[BookingController::class,'booking']);
 Route::get('/bookings/step2',[BookingController::class,'purchase']);
 Route::get('/bookings/step3',[BookingController::class,'complete']);
+
+// auth
 Route::get('/login',[AuthController::class,'login']);
+Route::post('/login',[AuthController::class,'loginStore']);
 Route::get('/register',[AuthController::class,'register']);
+Route::post('/register',[AuthController::class,'registerStore']);
+Route::post('/logout',[AuthController::class,'logout']);

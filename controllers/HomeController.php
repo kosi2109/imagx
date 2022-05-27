@@ -7,11 +7,7 @@ class HomeController
 {
     public function index()
     {
-        $movie = new Movie();
-        $movies = $movie->where("id","=",1)->get();
-        return view('index',[
-            "movies" => $movies
-        ]);
+        return view('index');
     }
 
 }
