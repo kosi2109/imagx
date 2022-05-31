@@ -113,9 +113,9 @@
 
             <!-- seats -->
             <div class="seats mt-4">
-                <?php
-                $letterAscii = ord("J");
-                ?>
+                <!-- start alpha from J -->
+                <?php $letterAscii = ord("J"); ?>
+                
                 <!-- loop seats -->
                 <?php foreach (range(0, 9) as $row) : ?>
                     <div class="row text-center mb-1">
@@ -127,17 +127,19 @@
                         <div class="col-10">
                             <div class="row mb-2">
                                 <?php foreach (range(1, 12) as $col) : ?>
+                                    <!-- middle seat -->
                                     <?php if ($col == 6) : ?>
                                         <div class="col-1 p-0 p-md-1 left-end-seat">
-                                            <img class="seat" src="<?= asset('/assets/seat.png') ?>" alt="">
+                                            <img data-seat="<?= chr($letterAscii) . $col ?>" class="seat" src="<?= asset(renderSeats(chr($letterAscii) . $col)) ?>" alt="">
                                         </div>
+                                    <!-- middle seat -->
                                     <?php elseif ($col == 7) : ?>
                                         <div class="col-1 p-0 p-md-1 right-end-seat">
-                                            <img class="seat" src="<?= asset('/assets/seat.png') ?>" alt="">
+                                            <img data-seat="<?= chr($letterAscii) . $col ?>" class="seat" src="<?= asset(renderSeats(chr($letterAscii) . $col)) ?>" alt="">
                                         </div>
                                     <?php else : ?>
                                         <div class="col-1 p-0 p-md-1">
-                                            <img class="seat" src="<?= asset('/assets/seat.png') ?>" alt="">
+                                            <img data-seat="<?= chr($letterAscii) . $col ?>" class="seat" src="<?= asset(renderSeats(chr($letterAscii) . $col)) ?>" alt="">
                                         </div>
                                     <?php endif; ?>
 
@@ -178,11 +180,12 @@
                     <h4 class="curStep text-center"><span>01</span> CHOOSE SEATS</h4>
                 </div>
                 <div class="col-4 d-flex justify-content-center align-items-center">
+
                     <a href="/bookings/step2">
-                        <button class="bookingStep">Purchase</button>
+                        <button class="bookingStep" disabled="true" id="purchase">Purchase</button>
                     </a>
                 </div>
-                
+
             </div>
             <div class="row mt-3 d-md-none">
                 <div class="col-6">
@@ -221,5 +224,59 @@
         </div>
     </div>
 </div>
+
+<script>
+    const seats = document.querySelectorAll('.seat');
+    let seat_from_session = <?= $selected_seat ?>;
+    let seatArray = (seat_from_session) ? seat_from_session : [];
+    
+    // disable button if any seat is selected
+    function disableBtn() {
+        const purchase = document.getElementById('purchase');
+        if (seatArray.length == 0) {
+            purchase.disabled = true;
+        } else {
+            purchase.disabled = false;
+        }
+    }
+
+    disableBtn();
+
+    // seat click handaler
+    seats.forEach((seat) => {
+        seat.addEventListener('click', () => {
+            let seatNo = seat.dataset.seat;
+            if (seatArray.includes(seatNo)) {
+                seatArray = seatArray.filter(se => se !== seatNo)
+                seat.src = "<?= asset('/assets/seat.png') ?>";
+            } else {
+                seatArray.push(seatNo)
+                seat.src = "<?= asset('/assets/available.png') ?>";
+            }
+            fetchSeatController();
+            disableBtn();
+        })
+    })
+
+
+    // seat controller 
+    function fetchSeatController() {
+        let req = new XMLHttpRequest();
+
+        req.onreadystatechange = function() {
+            if (req.readyState == 4 && req.status !== 200) {
+                console.log("something worng");
+            }
+        }
+        if (seatArray.length > 0) {
+            data = "movie=venom&seats=" + seatArray;
+        } else {
+            data = "movie=venom";
+        }
+        req.open('POST', '/bookings/seathandler', true);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        req.send(data);
+    }
+</script>
 
 <?php require_once __DIR__ . "/layouts/footer.php" ?>

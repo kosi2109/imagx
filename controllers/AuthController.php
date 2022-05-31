@@ -1,4 +1,5 @@
 <?php
+
 namespace controllers;
 
 use models\User;
@@ -7,7 +8,7 @@ class AuthController
 {
     public function login()
     {
-        if($_SESSION['auth']){
+        if ($_SESSION['auth']) {
             return redirect();
         }
         return view('auth/login');
@@ -16,19 +17,19 @@ class AuthController
     public function loginStore()
     {
         $users = new User();
-        $user = $users->where(request('username'),'username')->getOne();
-        if(!$user){
+        $user = $users->where(request('username'), 'username')->getOne();
+        if (!$user) {
+            setOld(['username' => request("username")]);
             setError([
-                "message"=>"User Not Found .",
-                "username"=>request("username")
+                "message" => "User Not Found .",
             ]);
-            return redirectBack(["test"=>"test"]);
+            return redirectBack(["test" => "test"]);
         }
-        
-        if(!password_verify(request('password'),$user['password'])){
+
+        if (!password_verify(request('password'), $user['password'])) {
+            setOld(['username' => request("username")]);
             setError([
-                "message"=>"Wrong User Creditial",
-                "username"=>request("username")
+                "message" => "Wrong User Creditial",
             ]);
             return redirectBack();
         }
@@ -42,7 +43,7 @@ class AuthController
 
     public function register()
     {
-        if($_SESSION['auth']){
+        if ($_SESSION['auth']) {
             return redirect();
         }
         return view('auth/register');
@@ -50,38 +51,43 @@ class AuthController
 
     public function registerStore()
     {
-        if(request("username") == "" | request("full_name") == "" | request("password") == "" | request("password2") == "")
-        {
+        if (request("username") == "" | request("full_name") == "" | request("password") == "" | request("password2") == "") {
+            setOld([
+                "username" => request("username"),
+                "full_name" => request("full_name"),
+            ]);
             setError([
-                "message"=>"All fields are required",
-                "username"=>request("username"),
-                "full_name"=>request("full_name"),
+                "message" => "All fields are required",
             ]);
             return redirectBack();
         }
 
-        if(request("password") !== request("password2")){
+        if (request("password") !== request("password2")) {
+            setOld([
+                "username" => request("username"),
+                "full_name" => request("full_name"),
+            ]);
             setError([
-                "message"=>"Password doesn't match",
-                "username"=>request("username"),
-                "full_name"=>request("full_name"),
+                "message" => "Password doesn't match",
             ]);
             return redirectBack();
         }
         $users = new User();
-        $user = $users->where(request('username'),'username')->getOne();
-        if($user){
+        $user = $users->where(request('username'), 'username')->getOne();
+        if ($user) {
+            setOld([
+                "username" => request("username"),
+                "full_name" => request("full_name"),
+            ]);
             setError([
-                "message"=>"Password doesn't match",
-                "username"=>request("username"),
-                "full_name"=>request("full_name"),
+                "message" => "User already exist .",
             ]);
             return redirectBack();
         }
         $req = [
             'username' => request('username'),
             'full_name' => request('full_name'),
-            'password' => password_hash(request('password'),PASSWORD_DEFAULT),
+            'password' => password_hash(request('password'), PASSWORD_DEFAULT),
         ];
 
         $users->store($req);
@@ -94,5 +100,4 @@ class AuthController
         session_destroy();
         return redirect('/login');
     }
-
 }

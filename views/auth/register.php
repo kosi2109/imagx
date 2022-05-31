@@ -9,8 +9,8 @@
                 <h1 class="movieName">Register</h1>
             </div>
             <form action="/register" method="POST" class="mb-5 d-flex flex-column">
-                <input required value="<?= $_SESSION["error"]["username"] ? $_SESSION["error"]["username"]  : '' ?>" class="mb-4 input" type="text" name="username" placeholder="Username">
-                <input required value="<?= $_SESSION["error"]["full_name"] ? $_SESSION["error"]["full_name"]  : '' ?>" class="mb-4 input" type="text" name="full_name" placeholder="FullName">
+                <input required value="<?= old('username') ? old('username') : '' ?>" class="mb-4 input" type="text" name="username" placeholder="Username">
+                <input required value="<?= old('full_name') ? old('full_name') : '' ?>" class="mb-4 input" type="text" name="full_name" placeholder="FullName">
                 <input required class="mb-4 input" type="password" name="password" placeholder="Password">
                 <input required class="mb-4 input" type="password" name="password2" placeholder="Comfirm Password">
                 <button class="authBtn">Register</button>
@@ -26,7 +26,6 @@
         Toastify({
         text: "<?= error("message") ?>",
         }).showToast();
-        <?php unset($_SESSION["error"]) ; ?>
     <?php endif ;?>
 </script>
     

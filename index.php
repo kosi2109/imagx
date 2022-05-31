@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 session_start();
 require "./vendor/autoload.php";
 use app\DB;
@@ -9,6 +11,7 @@ $dotenv = Dotenv::createMutable(__DIR__);
 $dotenv->load();
 
 require_once "./helpers.php";
+require_once "./utils.php";
 require_once "./routes/routers.php";
 
 $config = new Config();

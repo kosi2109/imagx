@@ -375,6 +375,7 @@
 
 .seat{
     width: auto;
+    cursor: pointer;
     height: auto;
 }
 
