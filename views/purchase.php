@@ -11,9 +11,9 @@
             <h3>Movie Name</h3>
             <h4><?= $movie['name'] ?></h4>
             <h3>Show Time</h3>
-            <h4>3 : 00 PM</h4>
+            <h4><?= $time ?></h4>
             <h3>Date</h3>
-            <h4>January , 21</h4>
+            <h4><?= $date ?></h4>
         </div>
         <div class="col-md-6 mb-3">
             <h3>Detail</h3>
@@ -50,7 +50,7 @@
     </div>
     <div class="row mt-5">
         <div class="col-4 d-flex justify-content-center align-items-center">
-            <a href="/bookings/step1">
+            <a href="/bookings/step1?movie=<?= $movie['name'] ?>">
                 <button class="bookingStep">CHOOSE SEAT</button>
             </a>
         </div>
@@ -58,11 +58,13 @@
             <h4 class="curStep text-center"><span>02</span> PURCHASE</h4>
         </div>
         <div class="col-4 d-flex justify-content-center align-items-center">
-            <a href="/bookings/step3">
+            <form method="POST">
+                <input type="hidden" name="movie_name" value="<?= $movie['name'] ?>">
                 <button class="bookingStep" <?= empty($seats) ? "disabled" : "" ?>>COMFIRM</button>
-            </a>
+            </form>
         </div>
     </div>
 </div>
+
 
 <?php require_once __DIR__ . "/layouts/footer.php" ?>

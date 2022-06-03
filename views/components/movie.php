@@ -36,8 +36,8 @@
                 </div>
                 <div class="d-flex flex-column flex-md-row justify-content-md-between">
                     <h2>Directed by - 	Ruben Fleischer</h2>
-                    <a href="/bookings/step1">
-                        <button class="btn">
+                    <a href="/bookings/step1?movie=Venom">
+                        <button class="btn">    
                             Book
                         </button>
                     </a>

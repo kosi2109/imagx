@@ -8,43 +8,23 @@ class AuthController
 {
     public function login()
     {
-        if ($_SESSION['auth']) {
-            return redirect();
+        if (auth()) {
+            return redirectBack();
         }
         return view('auth/login');
     }
 
     public function loginStore()
     {
-        $users = new User();
-        $user = $users->where(request('username'), 'username')->getOne();
-        if (!$user) {
-            setOld(['username' => request("username")]);
-            setError([
-                "message" => "User Not Found .",
-            ]);
-            return redirectBack(["test" => "test"]);
+        if($this->attempt(request('username'),request('password'))){
+            return redirect();
         }
-
-        if (!password_verify(request('password'), $user['password'])) {
-            setOld(['username' => request("username")]);
-            setError([
-                "message" => "Wrong User Creditial",
-            ]);
-            return redirectBack();
-        }
-
-        $_SESSION["auth"] = [
-            "username" => $user->username,
-            "full_name" => $user->full_name,
-        ];
-        return redirect();
     }
 
     public function register()
     {
-        if ($_SESSION['auth']) {
-            return redirect();
+        if (auth()) {
+            return redirectBack();
         }
         return view('auth/register');
     }
@@ -100,4 +80,35 @@ class AuthController
         session_destroy();
         return redirect('/login');
     }
+
+    private function attempt (string $username , string $password)
+    {
+        $users = new User();
+        $user = $users->where($username, 'username')->getOne();
+        if (!$user) 
+        {
+            setOld(['username' => $username]);
+            setError([
+                "message" => "User Not Found .",
+            ]);
+            return redirectBack(["test" => "test"]);
+        };
+
+        if (!password_verify($password, $user['password'])) 
+        {
+            setOld(['username' => $username]);
+            setError([
+                "message" => "Wrong User Creditial",
+            ]);
+            return redirectBack();
+        };  
+
+        $_SESSION["auth"] = [
+            "username" => $user['username'],
+            "full_name" => $user['full_name'],
+        ];
+        return true;
+    }
+
+
 }

@@ -11,24 +11,12 @@
             <form action="/login" method="POST" class="mb-5 d-flex flex-column">
                 <input required value="<?= old("username") ? old("username")  : '' ?>" class="mb-4 input" type="text" name="username" placeholder="Username">
                 <input required class="mb-4 input" type="password" name="password" placeholder="Password">
-                <button class="authBtn">Login</button>
+                <button class="btn">Login</button>
             </form>
             
             <h5 class="formChangeText">You don’t have an account ? <a href="/register">Register</a></h5>
         </div>
     </div>
 </div>
-<script>
-    <?php if(error("message")) :?>
-        Toastify({
-        text: "<?= error("message") ?>",
-        }).showToast();
-    <?php endif ;?>
 
-    <?php if(isset($_SESSION["success"])) :?>
-        Toastify({
-        text: "<?= $_SESSION["success"] ?>",
-        }).showToast();
-    <?php endif ;?>
-</script>
 <?php require_once __DIR__ . "/../layouts/footer.php" ?>

@@ -24,7 +24,7 @@ class QueryBuilder
     {
         $statement = $this->pdo->prepare("SELECT * FROM $this->table");
         $statement->execute();
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function where($value, ?string $column = 'id' , ?string $operator = '=') 
@@ -70,6 +70,6 @@ class QueryBuilder
             $statement->bindValue(":$key",$value);
         }
         $statement->execute();
-        var_dump("Done");
+        return true;
     }
 }

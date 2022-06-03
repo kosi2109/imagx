@@ -13,7 +13,7 @@
                 <input required value="<?= old('full_name') ? old('full_name') : '' ?>" class="mb-4 input" type="text" name="full_name" placeholder="FullName">
                 <input required class="mb-4 input" type="password" name="password" placeholder="Password">
                 <input required class="mb-4 input" type="password" name="password2" placeholder="Comfirm Password">
-                <button class="authBtn">Register</button>
+                <button class="btn">Register</button>
             </form>
             <h5 class="formChangeText">Do you already have an account ? <a href="/login">Login</a></h5>
         </div>
@@ -21,13 +21,5 @@
     
 </div>
 
-<script>
-    <?php if(error("message")) :?>
-        Toastify({
-        text: "<?= error("message") ?>",
-        }).showToast();
-    <?php endif ;?>
-</script>
     
-
 <?php require_once __DIR__ . "/../layouts/footer.php" ?>

@@ -31,8 +31,6 @@ input{
 }
 
 .btn{
-    width: 100px !important;
-    height: 40px !important;
     background-color: var(--red) !important;
     color: var(--white) !important;
     font-weight: 400;

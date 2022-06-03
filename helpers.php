@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+
+
+function auth () : array | bool
+{
+    $auth = $_SESSION['auth'];
+    if (!$auth){
+        return false;
+    }
+
+    return $auth;
+}
+
 function dd($something): void
 {
     var_dump($something);
@@ -29,7 +41,7 @@ function clear_temp_session(): void
     unset($_SESSION['success']);
 }
 
-function request(?string $variable = null) : array | string | int
+function request(?string $variable = null) : array | string | int | bool
 {
     $method = $_SERVER["REQUEST_METHOD"];
     if ($variable == null) {
@@ -44,12 +56,14 @@ function request(?string $variable = null) : array | string | int
             }, $_POST);
             return $post;
         }
-    } else {
-        if ($method == "GET" && count($_GET) > 0 && $_GET[$variable] != null) {
+    } else if(isset($_GET[$variable]) | isset($_POST[$variable]) ) {
+        if ($method == "GET") {
             return htmlspecialchars($_GET[$variable]);
-        } elseif ($method == "POST" && count($_POST) > 0 && $_POST[$variable] != null) {
+        } elseif ($method == "POST") {
             return htmlspecialchars($_POST[$variable]);
         }
+    } else {
+        return false;
     }
 }
 
@@ -73,7 +87,12 @@ function redirect(?string $uri = '/'): void
 
 function redirectBack(): void
 {
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    if($_SERVER['HTTP_REFERER'] == null){
+        header('Location: /');
+    }else{
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+    
 }
 
 
@@ -84,7 +103,7 @@ function setOld(array $array)
     }
 }
 
-function old(string | int $key) : string | int
+function old(string | int $key) : string | int | null
 {
     $temp = $_SESSION['old'][$key];
     return $temp;
@@ -100,20 +119,4 @@ function error(string | int $key) : string | int
     return $_SESSION['error'][$key];
 }
 
-function renderSeats(string $seat_no, string $movie = "venom")
-{
-    $selected_seats = $_SESSION['seat_data'][$movie];
-    
-    if(!$selected_seats){
-        return '/assets/seat.png';
-    }
 
-    $bo = '/assets/seat.png';
-    foreach ($selected_seats as $seat) {
-        if ($seat_no == $seat) {
-            $bo = '/assets/available.png';
-            break;
-        }
-    }
-    return $bo;
-}
