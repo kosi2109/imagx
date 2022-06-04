@@ -9,6 +9,9 @@
                 <li><a href="/" class="nav-link">Home</a></li>
                 <li><a href="/schedule" class="nav-link">Schedule</a></li>
                 <li><a href="/movies" class="nav-link">Movies</a></li>
+                <?php if(auth()) : ?>
+                <li><a href="/profile" class="nav-link">Profile</a></li>
+                <?php endif ; ?>
             </ul>
             <?php if($_SESSION['auth']) :?>
                 <form action="/logout" method="POST">

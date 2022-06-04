@@ -5,6 +5,7 @@ use controllers\AuthController;
 use controllers\HomeController;
 use controllers\MovieController;
 use controllers\BookingController;
+use controllers\ProfileController;
 use controllers\ScheduleController;
 
 Route::get('/',[HomeController::class,'index']);
@@ -18,6 +19,9 @@ Route::post('/bookings/step2',[BookingController::class,'storePurchase']);
 Route::get('/bookings/step3',[BookingController::class,'complete']);
 Route::post('/bookings/seathandler',[BookingController::class,'seatHandler']);
 Route::get('/get-seats',[BookingController::class,'getSeats']);
+
+// profile
+Route::get('/profile',[ProfileController::class,'index']);
 
 // auth
 Route::get('/login',[AuthController::class,'login']);

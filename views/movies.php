@@ -7,41 +7,38 @@
         <h1 class="movieName">Showing</h1>
     </div>
     <div class="row">
-        <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
-        </div>
+        <?php foreach($showing as $movie) : ?>
         <div class="col-md-3 p-2">
             <div class="movieCard">
                 <div>
-                    <img class="thumbnail" src="<?= asset('/assets/thumbnail2.jpg') ?>" alt="">
+                    <img class="thumbnail" src="<?= $movie['movie_img'] ?>" alt="<?= $movie['name'] ?>">
                 </div>
                 <div class="card-bd my-2">
-                    <h2>Venom</h2>
-                    <h3>120min | superhero</h3>
+                    <h2><?= $movie['name'] ?></h2>
+                    <h3><?= $movie['runtime'] ?> mins | superhero</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
-        </div>
-        <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
-        </div>
-        <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
-        </div>
+        <?php endforeach; ?>
     </div>
 
     <div class="movieHeader py-2 mb-2">
         <h1 class="movieName">Comming Soon</h1>
     </div>
     <div class="row">
+    <?php foreach($comming_soon as $movie) : ?>
         <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
+            <div class="movieCard">
+                <div>
+                    <img class="thumbnail" src="<?= $movie['movie_img'] ?>" alt="<?= $movie['name'] ?>">
+                </div>
+                <div class="card-bd my-2">
+                    <h2><?= $movie['name'] ?></h2>
+                    <h3><?= $movie['runtime'] ?> mins | superhero</h3>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3 p-2">
-            <?php require __DIR__ . "/components/card.php" ?>
-        </div>
+        <?php endforeach; ?>
     </div>
 </div>
 

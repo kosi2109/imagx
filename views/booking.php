@@ -202,6 +202,7 @@
     </div>
 </div>
 
+<!-- i want to use data from php so i did't split -->
 <script>
     const time = document.querySelectorAll('.time');
     const date = document.querySelectorAll('.date');
@@ -219,7 +220,7 @@
             t.children[1].classList.add('active');
             selected_date = t.dataset.date
         }
-        
+
         t.addEventListener('click', function() {
             selected_date = t.dataset.date;
             date.forEach((t2, i2) => {
@@ -235,7 +236,7 @@
         })
     })
 
-    if(!selected_date){
+    if (!selected_date) {
         date[0].children[1].classList.add('active');
         selected_date = date[0].dataset.date
     }
@@ -285,11 +286,11 @@
         }
     }
 
-    function renderSeats(){
-        seats.forEach((seat)=>{
+    function renderSeats() {
+        seats.forEach((seat) => {
             let seatNo = seat.dataset.seat;
             let is_sold = sold_seats.includes(seatNo);
-            let is_selected = seatArray.includes(seatNo);  
+            let is_selected = seatArray.includes(seatNo);
             if (is_sold) {
                 seat.src = "<?= asset('assets/taken.png') ?>";
             } else if (is_selected) {
@@ -306,16 +307,16 @@
             seat.addEventListener('click', () => {
                 let seatNo = seat.dataset.seat;
                 let is_sold = sold_seats.includes(seatNo);
-                let is_selected = seatArray.includes(seatNo);       
+                let is_selected = seatArray.includes(seatNo);
                 if (!is_selected && !sold_seats.includes(seatNo)) {
                     seatArray.push(seatNo)
                     seat.src = "<?= asset('assets/available.png') ?>";
-                        
-                }else if (is_selected && !sold_seats.includes(seatNo)) {
+
+                } else if (is_selected && !sold_seats.includes(seatNo)) {
                     seatArray = seatArray.filter(se => se !== seatNo)
                     seat.src = "<?= asset('assets/seat.png') ?>";
                 }
-                fetchSeatController();    
+                fetchSeatController();
                 disableBtn();
             })
         })

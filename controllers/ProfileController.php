@@ -1,12 +1,11 @@
 <?php
 namespace controllers;
 
-
-class HomeController
+class ProfileController
 {
     public function index()
     {
-        return view('index');
+        return view('profile/index');
     }
 
 }
