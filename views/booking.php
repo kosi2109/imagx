@@ -205,14 +205,21 @@
 <script>
     const time = document.querySelectorAll('.time');
     const date = document.querySelectorAll('.date');
+    const seats = document.querySelectorAll('.seat');
     let selected_date;
     let show_time;
+    let seat_from_session = <?= $selected_seat ?>;
+    let seatArray = (seat_from_session) ? seat_from_session : [];
+    var sold_seats = [];
 
+    // add click event for time and select first date
     date.forEach((t, i) => {
+        // select date today 
         if (new Date("<?= $show_date ? $show_date : $today_date ?>").toISOString().slice(0, 10) === t.dataset.date) {
             t.children[1].classList.add('active');
             selected_date = t.dataset.date
         }
+        
         t.addEventListener('click', function() {
             selected_date = t.dataset.date;
             date.forEach((t2, i2) => {
@@ -222,11 +229,18 @@
                     t2.children[1].classList.remove('active');
                 }
             })
-            fetchSeatController();
+            seatArray = [];
             fetchSeats();
+            fetchSeatController();
         })
     })
 
+    if(!selected_date){
+        date[0].children[1].classList.add('active');
+        selected_date = date[0].dataset.date
+    }
+
+    // add click event for time and select first time
     time.forEach((t, i) => {
         if (i == 0) {
             show_time = t.innerText;
@@ -241,27 +255,25 @@
                 }
             })
             show_time = t.children[0].innerText;
-            fetchSeatController();
+            seatArray = [];
             fetchSeats();
+            fetchSeatController();
         })
     })
 
 
+    // fetch seat by date and time
     function fetchSeats() {
-        
         let req = new XMLHttpRequest();
         req.onreadystatechange = function() {
             if (req.readyState == 4 && req.status === 200) {
-                addClickEvent(JSON.parse(req.responseText))
+                sold_seats = JSON.parse(req.responseText);
+                renderSeats();
             }
         }
         req.open('GET', `/get-seats?movie_name=<?= $movie['name'] ?>&movie_date=${selected_date}&movie_time=${show_time}&movie_id=<?= $movie['id'] ?>`, true);
         req.send();
     }
-
-
-    let seat_from_session = <?= $selected_seat ?>;
-    let seatArray = (seat_from_session) ? seat_from_session : [];
 
     // disable button if any seat is selected
     function disableBtn() {
@@ -273,47 +285,47 @@
         }
     }
 
-
-    function addClickEvent(sold_seats) {
-        let seats = document.querySelectorAll('.seat');
-
-        seats.forEach((seat) => {
+    function renderSeats(){
+        seats.forEach((seat)=>{
             let seatNo = seat.dataset.seat;
             let is_sold = sold_seats.includes(seatNo);
-            let is_selected = seatArray.includes(seatNo);
+            let is_selected = seatArray.includes(seatNo);  
             if (is_sold) {
                 seat.src = "<?= asset('assets/taken.png') ?>";
-            }else if(is_selected){
+            } else if (is_selected) {
                 seat.src = "<?= asset('assets/available.png') ?>";
-            }else{
+            } else {
                 seat.src = "<?= asset('assets/seat.png') ?>";
             }
+        })
+    }
+
+    // click event for seat and render seat conditionally
+    function addClickEvent() {
+        seats.forEach((seat) => {
             seat.addEventListener('click', () => {
-                seatNo = seat.dataset.seat;
-                is_sold = sold_seats.includes(seatNo);
-                is_selected = seatArray.includes(seatNo);
-                <?php if (!auth()) : ?>
-                    Toastify({
-                        text: "Please Login to Purchase",
-                    }).showToast();
-                <?php else : ?>
-                    if (is_selected && !is_sold) {
-                        seatArray = seatArray.filter(se => se !== seatNo)
-                        seat.src = "<?= asset('assets/seat.png') ?>";
-                    } else if(!is_selected && !is_sold) {
-                        seatArray.push(seatNo)
-                        seat.src = "<?= asset('assets/available.png') ?>";
-                    }
-                    fetchSeatController();
-                <?php endif; ?>
+                let seatNo = seat.dataset.seat;
+                let is_sold = sold_seats.includes(seatNo);
+                let is_selected = seatArray.includes(seatNo);       
+                if (!is_selected && !sold_seats.includes(seatNo)) {
+                    seatArray.push(seatNo)
+                    seat.src = "<?= asset('assets/available.png') ?>";
+                        
+                }else if (is_selected && !sold_seats.includes(seatNo)) {
+                    seatArray = seatArray.filter(se => se !== seatNo)
+                    seat.src = "<?= asset('assets/seat.png') ?>";
+                }
+                fetchSeatController();    
                 disableBtn();
-                console.log(seatArray);
             })
         })
     }
 
 
-    // seat controller 
+
+
+
+    // add selected seats to session  
     function fetchSeatController() {
         let req = new XMLHttpRequest();
 
@@ -325,17 +337,15 @@
         if (seatArray.length > 0) {
             data = `movie=<?= $movie['name'] ?>&date=${selected_date}&time=${show_time}&seats=${seatArray}`;
         } else {
-            data = "movie=venom";
+            data = "movie=<?= $movie['name'] ?>";
         }
         req.open('POST', '/bookings/seathandler', true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.send(data);
     }
 
-
-
-
     fetchSeats();
+    addClickEvent();
     disableBtn();
 </script>
 

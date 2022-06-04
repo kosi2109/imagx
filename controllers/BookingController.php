@@ -124,6 +124,7 @@ class BookingController
 
     public function seatHandler()
     {
+        
         if(request('seats')){
             $_SESSION['seat_data'][request('movie')]['seats'] = explode(',',request('seats'));
             $_SESSION['seat_data'][request('movie')]['date'] = request('date');
@@ -137,11 +138,9 @@ class BookingController
     public function getSeats()
     {
         $movie_id = request('movie_id');
-        $movie_name = request('movie_name');
         $movie_date = request('movie_date');
         $movie_time = request('movie_time');
         $bookings = new Booking();
-        $selected_seats = $_SESSION['seat_data'][$movie_name]['seats'];
         $soldSeats = $bookings->soldSeats($movie_id,$movie_date,$movie_time);
         echo json_encode($soldSeats);
     }
