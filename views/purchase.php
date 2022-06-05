@@ -21,6 +21,7 @@
             <?php $grand_total = 0; ?>
             <?php foreach ($seats as $key => $seat) : ?>
                 <div class="d-flex justify-content-between">
+                    <!-- group the same row(A1,A2,A3) -->
                     <?php
                     $se_string = "";
                     foreach ($seat as $st) {

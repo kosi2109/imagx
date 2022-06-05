@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use models\Movie;
 use Carbon\CarbonPeriod;
 use models\Booking;
+use models\User;
 
 class BookingController
 {
@@ -101,10 +102,12 @@ class BookingController
         }
 
         $seat_data = $_SESSION['seat_data'][$movie_name];
+        $users = new User();
+        $user = $users->where(auth()['username'],'username')->getOne();
 
         $bookings = new Booking();
         $booking = $bookings->store([
-            'user_id'=>'1',
+            'user_id'=>$user['id'],
             'movie_id'=> "".$movie['id'],
             'date'=>$seat_data['date'],
             'show_time'=>$seat_data['time'],

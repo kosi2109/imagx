@@ -15,7 +15,7 @@ class Booking extends Model
         $this->setTabel($this->getTableNameFromClassName());
     }
 
-    public function soldSeats(string $id,string $date , string $time)
+    public function soldSeats(string $id,string $date , string $time) : array
     {
         $statement = $this->pdo->prepare("SELECT seats FROM bookings  
                                         WHERE (movie_id = :id AND show_time = :show_time AND date = :date )");
@@ -31,6 +31,19 @@ class Booking extends Model
             }
         }
         return $seatsArray;
+    }
+
+    public function myOrder(string $user_id) : array
+    {
+        $statement = $this->pdo->prepare("SELECT bookings.id,bookings.show_time,bookings.date,                              
+                                        bookings.seats,movies.name as movie_name
+                                        FROM bookings 
+                                        INNER JOIN movies 
+                                        ON bookings.movie_id = movies.id 
+                                        WHERE bookings.user_id = :id ");
+        $statement->bindValue(':id',$user_id);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);                                                    
     }
 
 }
