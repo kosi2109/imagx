@@ -26,7 +26,7 @@ class BookingController
         $period = new CarbonPeriod($movie['start_date'],$movie['end_date']);
         $today_date =  Carbon::now();
         $today_date =  $today_date->toDateString();
-        $show_times = $movies->times($movie['id']);
+        $show_times =  $movies->times($movie['id']);
         $show_date =  $_SESSION['seat_data'][$movie_name]['date'] ?  $_SESSION['seat_data'][$movie_name]['date'] : $today_date;
         $selected_seats = $_SESSION['seat_data'][$movie_name]['seats'];
         $soldSeats = $bookings->soldSeats("".$movie['id'],$show_date,$show_times[0]['show_time']);
@@ -43,6 +43,8 @@ class BookingController
 
     public function purchase()
     {
+        login_required();
+
         $mov = request('movie');
         if (!$mov){
             setError([
@@ -84,6 +86,8 @@ class BookingController
 
     public function storePurchase()
     {
+        login_required();
+
         $movie_name = request('movie_name');
         if(!$movie_name){
             setError([
@@ -122,11 +126,13 @@ class BookingController
 
     public function complete()
     {
+        login_required();
         return view('purchaseComplete');
     }
 
     public function seatHandler()
     {
+        login_required();
         
         if(request('seats')){
             $_SESSION['seat_data'][request('movie')]['seats'] = explode(',',request('seats'));
@@ -140,6 +146,8 @@ class BookingController
 
     public function getSeats()
     {
+        login_required();
+
         $movie_id = request('movie_id');
         $movie_date = request('movie_date');
         $movie_time = request('movie_time');

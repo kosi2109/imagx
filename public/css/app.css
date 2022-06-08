@@ -271,6 +271,35 @@
 /* ----------------- */
 /* booking */
 
+.dateContainer{
+    scroll-behavior: smooth;
+    width: 80%;
+    position: relative;
+    overflow-x: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dateContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+.dateScrollBtn{
+    margin-left: 5px;
+    height: 30px;
+    width: 10%;
+    border: none;
+    outline: none;
+    background-color: var(--black);
+    color: var(--white);
+    transition: opacity 0.5 s ease-in-out;
+}
+
+.dateScrollBtn.active{
+    opacity: 0.4;
+
+}
+
 .movieDetailCard{
     width: 100%;
     background-color: rgba(0, 0, 0, 0.24);
@@ -305,7 +334,7 @@
     padding: 10px 0;
 }
 
-.dateItem{
+.dateItem,.timeItem{
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
@@ -314,23 +343,20 @@
 .date{
     width: 50px;
     height: 50px;
+    margin-right: 20px;
 }
 
-.dateItem.active{
+.dateItem.active,.timeItem.active{
     background-color: var(--green);
     border-radius: 100%;
     text-align: center;
+    border-radius: 5px;
+    width: 100%;
+    padding: 1px !important;
 }
 
 .time{
     width: 100%;
-}
-
-.dateItem.active{
-    background-color: var(--green);
-    border-radius: 5px;
-    width: 100%;
-    padding: 1px !important;
 }
 
 .screen{
@@ -498,3 +524,28 @@
 }
 
 /* popup */
+
+
+
+
+
+
+/* admin */
+.input-div{
+    width: 100%;
+    padding: 5px;
+}
+
+.input-div label{
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.input-div input{
+    width: 100%;
+    height: 40px;
+    outline: none;
+    border: none;
+    padding: 0 10px;
+    border-radius: 5px;
+}

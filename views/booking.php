@@ -60,13 +60,32 @@
                 <div class="col-lg-6 user-select-none">
                     <h3 class="dateTitle">Date</h3>
                     <div class="d-flex justify-content-start align-items-center">
-                        <?php foreach ($period as $p) : ?>
-                            <div data-date="<?= $p->format('Y-m-d') ?>" class="date me-3 d-flex flex-column align-items-center justify-content-center">
-                                <h4 class="dateItem p-0 m-0"><?= $p->format('D') ?></h4>
-                                <h4 class="dateItem p-0 m-0"><?= $p->format('d') ?></h4>
-                            </div>
-                        <?php endforeach; ?>
-
+                        <button id="dateScrollBacBtn" class="dateScrollBtn">
+                            <i class="fa-solid fa-caret-left"></i>
+                        </button>
+                        <div id="dateContainer" class="d-flex justify-content-start align-items-center dateContainer">
+                            <?php foreach ($period as $key => $p) : ?>
+                                <?php if ($key == 0) : ?>
+                                    <div id="firstDate" data-date="<?= $p->format('Y-m-d') ?>" class="date d-flex flex-column align-items-center justify-content-center">
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('D') ?></h4>
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('d') ?></h4>
+                                    </div>
+                                <?php elseif (count($period) == $key + 1) : ?>
+                                    <div id="lastDate" data-date="<?= $p->format('Y-m-d') ?>" class="date d-flex flex-column align-items-center justify-content-center">
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('D') ?></h4>
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('d') ?></h4>
+                                    </div>
+                                <?php else : ?>
+                                    <div data-date="<?= $p->format('Y-m-d') ?>" class="date d-flex flex-column align-items-center justify-content-center">
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('D') ?></h4>
+                                        <h4 class="dateItem p-0 m-0"><?= $p->format('d') ?></h4>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                        <button id="dateScrollNexBtn" class="dateScrollBtn">
+                            <i class="fa-solid fa-caret-right"></i>
+                        </button>
                     </div>
 
                 </div>
@@ -76,7 +95,7 @@
                         <?php foreach ($show_times as $key => $time) : ?>
                             <div class="col-3">
                                 <div class="time me-2 p-2">
-                                    <h4 class="dateItem p-0 m-0 text-center <?= $key == 0 ? "active" : "" ?> "><?= date('H:i', strtotime($time['show_time'])) ?></h4>
+                                    <h4 class="timeItem p-0 m-0 text-center <?= $key == 0 ? "active" : "" ?> "><?= date('H:i', strtotime($time['show_time'])) ?></h4>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -212,6 +231,61 @@
     let seat_from_session = <?= $selected_seat ?>;
     let seatArray = (seat_from_session) ? seat_from_session : [];
     var sold_seats = [];
+    const dateScrollNexBtn = document.getElementById('dateScrollNexBtn');
+    const dateScrollBacBtn = document.getElementById('dateScrollBacBtn');
+    const dateContainer = document.getElementById('dateContainer');
+
+    function findFirstOrLastDate() {
+
+        let options = {
+            root: dateContainer,
+            rootMargin: '0px',
+            threshold: 1.0
+        }
+
+        let callback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.id == "firstDate") {
+                        dateScrollBacBtn.classList.add('active')
+                    }
+
+                    if (entry.target.id == "lastDate") {
+                        dateScrollNexBtn.classList.add('active')
+                    }
+                } else {
+                    if (entry.target.id == "firstDate") {
+                        dateScrollBacBtn.classList.remove('active')
+                    }
+
+                    if (entry.target.id == "lastDate") {
+                        dateScrollNexBtn.classList.remove('active')
+                    }
+
+                }
+
+            });
+        };
+
+        let observer = new IntersectionObserver(callback, options);
+
+        let target = document.getElementById('firstDate');
+        let target2 = document.getElementById('lastDate');
+
+        observer.observe(target);
+        observer.observe(target2);
+    }
+
+    
+
+
+    dateScrollNexBtn.addEventListener('click', () => {
+        dateContainer.scrollBy((date[0].clientWidth * 6), 0)
+    })
+
+    dateScrollBacBtn.addEventListener('click', () => {
+        dateContainer.scrollBy(-(date[0].clientWidth * 6), 0)
+    })
 
     // add click event for time and select first date
     date.forEach((t, i) => {
@@ -303,23 +377,31 @@
 
     // click event for seat and render seat conditionally
     function addClickEvent() {
+
         seats.forEach((seat) => {
             seat.addEventListener('click', () => {
-                let seatNo = seat.dataset.seat;
-                let is_sold = sold_seats.includes(seatNo);
-                let is_selected = seatArray.includes(seatNo);
-                if (!is_selected && !sold_seats.includes(seatNo)) {
-                    seatArray.push(seatNo)
-                    seat.src = "<?= asset('assets/available.png') ?>";
+                <?php if (auth()) : ?>
+                    let seatNo = seat.dataset.seat;
+                    let is_sold = sold_seats.includes(seatNo);
+                    let is_selected = seatArray.includes(seatNo);
+                    if (!is_selected && !sold_seats.includes(seatNo)) {
+                        seatArray.push(seatNo)
+                        seat.src = "<?= asset('assets/available.png') ?>";
 
-                } else if (is_selected && !sold_seats.includes(seatNo)) {
-                    seatArray = seatArray.filter(se => se !== seatNo)
-                    seat.src = "<?= asset('assets/seat.png') ?>";
-                }
-                fetchSeatController();
-                disableBtn();
+                    } else if (is_selected && !sold_seats.includes(seatNo)) {
+                        seatArray = seatArray.filter(se => se !== seatNo)
+                        seat.src = "<?= asset('assets/seat.png') ?>";
+                    }
+                    fetchSeatController();
+                    disableBtn();
+                <?php else : ?>
+                    Toastify({
+                        text: "Login required",
+                    }).showToast();
+                <?php endif; ?>
             })
         })
+
     }
 
 
@@ -345,6 +427,7 @@
         req.send(data);
     }
 
+    findFirstOrLastDate();
     fetchSeats();
     addClickEvent();
     disableBtn();

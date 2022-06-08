@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace app;
 
 class QueryBuilder
@@ -9,8 +11,7 @@ class QueryBuilder
     protected $query;
     protected $columns;
     public function __construct()
-    {   
-        
+    {
     }
 
     public function getColumns()
@@ -27,7 +28,7 @@ class QueryBuilder
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function where($value, ?string $column = 'id' , ?string $operator = '=') 
+    public function where($value, ?string $column = 'id', ?string $operator = '=')
     {
         $this->query = "SELECT * FROM $this->table WHERE $column $operator '$value' ";
         return $this;
@@ -49,27 +50,62 @@ class QueryBuilder
 
     public function store(?array $values = null)
     {
-        if($values == null){
-            return;
-        }
-
-        $this->getColumns();
-        $columns = "";
-        $query_string = "";
-        foreach($this->columns as $column){
-            if($column != "id"){
-                $query_string .= ":$column, ";
-                $columns .= "$column, ";
+        try {
+            if ($values == null) {
+                return;
             }
-        }
-        $columns = rtrim($columns, ", ");
-        $query_string = rtrim($query_string, ", ");
-        $statement = $this->pdo->prepare("INSERT INTO $this->table ($columns) VALUES ($query_string)");
 
-        foreach($values as $key=>$value){
-            $statement->bindValue(":$key",$value);
+            $this->getColumns();
+            $columns = "";
+            $query_string = "";
+            foreach ($this->columns as $column) {
+                if ($column != "id") {
+                    $query_string .= ":$column, ";
+                    $columns .= "$column, ";
+                }
+            }
+            $columns = rtrim($columns, ", ");
+            $query_string = rtrim($query_string, ", ");
+            $statement = $this->pdo->prepare("INSERT INTO $this->table ($columns) VALUES ($query_string)");
+
+            foreach ($values as $key => $value) {
+                $statement->bindValue(":$key", $value);
+            }
+            $statement->execute();
+            return $this->where($this->pdo->lastInsertId())->getOne();
+        } catch (\Throwable $th) {
+            var_dump("err at add");
         }
-        $statement->execute();
-        return true;
+    }
+
+    public function update(string $id, array $values = null)
+    {
+        try {
+            if ($values == null) {
+                return;
+            }
+
+            $this->getColumns();
+
+            $query_string = "";
+            foreach ($this->columns as $column) {
+                if ($column != "id") {
+                    $query_string .= "$column = :$column, ";
+                }
+            }
+
+            $query_string = rtrim($query_string, ", ");
+            $statement = $this->pdo->prepare("UPDATE $this->table SET $query_string WHERE id = :id");
+            $statement->bindValue(':id', $id);
+            foreach ($values as $key => $value) {
+                if ($column != "id") {
+                    $statement->bindValue(":$key", $value);
+                }
+            }
+            $statement->execute();
+            return $this->where($id)->getOne();
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }

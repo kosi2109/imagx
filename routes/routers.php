@@ -1,6 +1,7 @@
 <?php
 // implement your routes here
 use app\Route;
+use controllers\AdminController;
 use controllers\AuthController;
 use controllers\HomeController;
 use controllers\MovieController;
@@ -21,6 +22,7 @@ Route::post('/bookings/seathandler',[BookingController::class,'seatHandler']);
 Route::get('/get-seats',[BookingController::class,'getSeats']);
 
 // profile
+// dd(Route::get('/profile',[ProfileController::class,'index'])->auth());
 Route::get('/profile',[ProfileController::class,'index']);
 
 // auth
@@ -29,3 +31,11 @@ Route::post('/login',[AuthController::class,'loginStore']);
 Route::get('/register',[AuthController::class,'register']);
 Route::post('/register',[AuthController::class,'registerStore']);
 Route::post('/logout',[AuthController::class,'logout']);
+
+
+// admin
+Route::get('/admin',[AdminController::class,'index']);
+Route::get('/admin/edit-movie',[AdminController::class,'edit']);
+Route::post('/admin/edit-movie',[AdminController::class,'update']);
+Route::get('/admin/create-movie',[AdminController::class,'create']);
+Route::post('/admin/create-movie',[AdminController::class,'store']);

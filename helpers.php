@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 
 
-function auth () : array | bool
+function auth(): array | bool
 {
     $auth = $_SESSION['auth'];
-    if (!$auth){
+    if (!$auth) {
         return false;
     }
 
@@ -41,8 +41,9 @@ function clear_temp_session(): void
     unset($_SESSION['success']);
 }
 
-function request(?string $variable = null) : array | string | int | bool
+function request(?string $variable = null): array | string | int | bool
 {
+    
     $method = $_SERVER["REQUEST_METHOD"];
     if ($variable == null) {
         if ($method == "GET" && count($_GET) > 0) {
@@ -52,11 +53,17 @@ function request(?string $variable = null) : array | string | int | bool
             return $get;
         } elseif ($method == "POST" && count($_POST) > 0) {
             $post = array_map(function ($g) {
+                if (is_array($g)){
+                    foreach($g as $i){
+                        htmlspecialchars($i);
+                    }
+                    return $g;
+                }
                 return htmlspecialchars($g);
             }, $_POST);
             return $post;
         }
-    } else if(isset($_GET[$variable]) | isset($_POST[$variable]) ) {
+    } else if (isset($_GET[$variable]) | isset($_POST[$variable])) {
         if ($method == "GET") {
             return htmlspecialchars($_GET[$variable]);
         } elseif ($method == "POST") {
@@ -87,12 +94,11 @@ function redirect(?string $uri = '/'): void
 
 function redirectBack(): void
 {
-    if($_SERVER['HTTP_REFERER'] == null){
+    if ($_SERVER['HTTP_REFERER'] == null) {
         header('Location: /');
-    }else{
+    } else {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
-    
 }
 
 
@@ -103,20 +109,29 @@ function setOld(array $array)
     }
 }
 
-function old(string | int $key) : string | int | null
+function old(string | int $key): string | int | null
 {
     $temp = $_SESSION['old'][$key];
     return $temp;
 }
 
-function setError($value) 
+function setError($value)
 {
     $_SESSION['error'] = $value;
 }
 
-function error(string | int $key) : string | int
+function error(string | int $key)
 {
     return $_SESSION['error'][$key];
 }
 
-
+function login_required() : void
+{
+    $auth = auth();
+    if (!$auth) {
+        setError([
+            "message" => "Login required",
+        ]);
+        redirectBack();
+    }
+}

@@ -8,9 +8,13 @@ class ProfileController
 {
     public function index()
     {
+        $auth = auth();
+        if(!$auth){
+            return redirectBack();
+        }
         $bookings = new Booking();
         $users = new User();
-        $user = $users->where(auth()['username'],'username')->getOne();
+        $user = $users->where($auth['username'],'username')->getOne();
         $bookings = $bookings->myOrder($user['id']);
         $bookings = array_map(function($booking){
             $seats = explode(',',$booking['seats']);

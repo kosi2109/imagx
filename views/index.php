@@ -6,7 +6,7 @@
     <div class="container main position-relative d-flex flex-column justify-content-center align-items-start" style="height: 80%;width : 100%">
         <h1>Welcome to IMAGX Cinema</h1>
         <a href="/schedule">
-            <button class="btn">Booking Now</button>
+            <button class="btn">Book Now</button>
         </a>
     </div>
 </div>
