@@ -35,7 +35,7 @@
                     </div>
                     <div class="d-flex flex-column flex-md-row justify-content-md-between">
                         <h2>Directed by - <?= $movie['director'] ?></h2>
-                        <a href="/bookings/step1?movie=<?= $movie['name']  ?>">
+                        <a href="/bookings/step1?movie=<?= $movie['slug']  ?>">
                             <button class="btn">
                                 Book
                             </button>

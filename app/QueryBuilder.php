@@ -78,7 +78,7 @@ class QueryBuilder
         }
     }
 
-    public function update(string $id, array $values = null)
+    public function update(string $id, array $values = null) 
     {
         try {
             if ($values == null) {
@@ -104,7 +104,19 @@ class QueryBuilder
             }
             $statement->execute();
             return $this->where($id)->getOne();
-        } catch (\Throwable $th) {
+        } catch (\PDOException $th) {
+            return false;
+        }
+    }
+
+    public function delete(string $id)
+    {
+        try {
+            $statement = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
+            $statement->bindValue(':id', $id);
+            $statement->execute();
+            return true;
+        } catch (\PDOException $th) {
             return false;
         }
     }

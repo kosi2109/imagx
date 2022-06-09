@@ -114,4 +114,34 @@ class AdminController
             return redirectBack();
         }
     }
+
+    public function destroy()
+    {
+        $id = request('movie_id');
+        if(!$id){
+            setError([
+                'message' => "Missing some data"
+            ]);
+            return redirectBack();
+        }
+        $movie_md = new Movie();
+        $movie = $movie_md->where($id)->getOne();
+        if(!$movie){
+            setError([
+                'message' => "Movie Not Found"
+            ]);
+            return redirectBack();
+        }
+        $deleted = $movie_md->delete($id);
+        if($deleted){
+            $_SESSION['success'] = $movie['name'] . "was successfully deleted";
+            return redirect('/admin');
+        }else{
+            setError([
+                'message' => "Something went wrong"
+            ]);
+            return redirectBack();
+        }
+
+    }
 }

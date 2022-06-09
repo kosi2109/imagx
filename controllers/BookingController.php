@@ -13,8 +13,8 @@ class BookingController
     public function booking()
     {
         
-        $movie_name = request('movie');
-        if (!$movie_name){
+        $movie_slug = request('movie');
+        if (!$movie_slug){
             setError([
                 "message" => "Please select one movie .",
             ]);
@@ -22,14 +22,16 @@ class BookingController
         }
         $movies = new Movie();
         $bookings = new Booking();
-        $movie = $movies->where(request('movie'),'name')->getOne();
+        $movie = $movies->where($movie_slug,'slug')->getOne();
         $period = new CarbonPeriod($movie['start_date'],$movie['end_date']);
         $today_date =  Carbon::now();
         $today_date =  $today_date->toDateString();
         $show_times =  $movies->times($movie['id']);
-        $show_date =  $_SESSION['seat_data'][$movie_name]['date'] ?  $_SESSION['seat_data'][$movie_name]['date'] : $today_date;
-        $selected_seats = $_SESSION['seat_data'][$movie_name]['seats'];
+        $generes = $movies->generes($movie['id']);
+        $show_date =  $_SESSION['seat_data'][$movie_slug]['date'] ?  $_SESSION['seat_data'][$movie_slug]['date'] : $today_date;
+        $selected_seats = $_SESSION['seat_data'][$movie_slug]['seats'];
         $soldSeats = $bookings->soldSeats("".$movie['id'],$show_date,$show_times[0]['show_time']);
+        
         return view('booking',[
             'selected_seat' => json_encode($selected_seats),
             'movie' => $movie,
@@ -38,6 +40,7 @@ class BookingController
             'soldSeats' => $soldSeats,
             'today_date' => $today_date,
             'show_date' => $show_date,
+            'generes' => $generes
         ]);
     }
 
@@ -45,20 +48,20 @@ class BookingController
     {
         login_required();
 
-        $mov = request('movie');
-        if (!$mov){
+        $movie_slug = request('movie');
+        if (!$movie_slug){
             setError([
                 "message" => "Please select one movie .",
             ]);
             return redirectBack();
         }
         $movies = new Movie();
-        $movie = $movies->where($mov,'name')->getOne();
+        $movie = $movies->where($movie_slug,'slug')->getOne();
         if (!$movie){
             var_dump('not found');
             return;
         }
-        $seat_data = $_SESSION['seat_data'][$mov];
+        $seat_data = $_SESSION['seat_data'][$movie_slug];
         $seats = $seat_data['seats'];
         $date = new Carbon($seat_data['date']);
         $time = new Carbon($seat_data['time']);
@@ -88,8 +91,8 @@ class BookingController
     {
         login_required();
 
-        $movie_name = request('movie_name');
-        if(!$movie_name){
+        $movie_slug = request('movie_slug');
+        if(!$movie_slug){
             setError([
                 "message" => "Please select one movie .",
             ]);
@@ -97,7 +100,7 @@ class BookingController
         }
 
         $movies = new Movie();
-        $movie = $movies->where($movie_name,'name')->getOne();
+        $movie = $movies->where($movie_slug,'slug')->getOne();
         if (!$movie){
             setError([
                 "message" => "Movie Not Found .",
@@ -105,7 +108,7 @@ class BookingController
             return redirectBack();
         }
 
-        $seat_data = $_SESSION['seat_data'][$movie_name];
+        $seat_data = $_SESSION['seat_data'][$movie_slug];
         $users = new User();
         $user = $users->where(auth()['username'],'username')->getOne();
 
@@ -118,8 +121,13 @@ class BookingController
             'seats'=> implode(',',$seat_data['seats']),
         ]);
         if($booking){
-            unset($_SESSION['seat_data'][$movie_name]);
+            unset($_SESSION['seat_data'][$movie_slug]);
             return redirect('/bookings/step3');
+        }else{
+            setError([
+                "message" => "Sorry , Can't purchase . Try Again . ",
+            ]);
+            return redirectBack();
         }
 
     }
@@ -135,11 +143,11 @@ class BookingController
         login_required();
         
         if(request('seats')){
-            $_SESSION['seat_data'][request('movie')]['seats'] = explode(',',request('seats'));
-            $_SESSION['seat_data'][request('movie')]['date'] = request('date');
-            $_SESSION['seat_data'][request('movie')]['time'] = request('time');
+            $_SESSION['seat_data'][request('movie_slug')]['seats'] = explode(',',request('seats'));
+            $_SESSION['seat_data'][request('movie_slug')]['date'] = request('date');
+            $_SESSION['seat_data'][request('movie_slug')]['time'] = request('time');
         }else{
-            unset($_SESSION['seat_data'][request('movie')]);
+            unset($_SESSION['seat_data'][request('movie_slug')]);
         }
         echo request('seats');
     }

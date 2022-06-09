@@ -39,3 +39,4 @@ Route::get('/admin/edit-movie',[AdminController::class,'edit']);
 Route::post('/admin/edit-movie',[AdminController::class,'update']);
 Route::get('/admin/create-movie',[AdminController::class,'create']);
 Route::post('/admin/create-movie',[AdminController::class,'store']);
+Route::post('/admin/delete-movie',[AdminController::class,'destroy']);

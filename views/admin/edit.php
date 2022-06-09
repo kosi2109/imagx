@@ -100,13 +100,48 @@ $title = 'Admin Dashboard' ?>
                         </div>
                     </div>
                 </div>
-                <button class="btn">
-                    Edit
-                </button>
+                <div class="d-flex justify-content-start">
+                    <button type="button" class="btn me-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        Delete
+                    </button>
+                    <button class="btn">
+                        Edit
+                    </button>
+                </div>
             </form>
+            
         </div>
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade " id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModal">Delete Movie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            <form id="deleteForm" action="/admin/delete-movie" method="POST">
+                <input type="hidden" name="movie_id" value="<?= $movie['id'] ?>">
+            </form>
+            <p>Are You Sure to Delete <?= $movie['name'] ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="deleteComfirm" class="btn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteComfirm = document.getElementById('deleteComfirm');
+    deleteComfirm.addEventListener('click',function(){
+        deleteForm.submit();    
+    })
+</script>
 
 <?php require_once __DIR__ . "/../layouts/footer.php" ?>

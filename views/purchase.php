@@ -51,7 +51,7 @@
     </div>
     <div class="row mt-5">
         <div class="col-4 d-flex justify-content-center align-items-center">
-            <a href="/bookings/step1?movie=<?= $movie['name'] ?>">
+            <a href="/bookings/step1?movie=<?= $movie['slug'] ?>">
                 <button class="bookingStep">CHOOSE SEAT</button>
             </a>
         </div>
@@ -60,7 +60,7 @@
         </div>
         <div class="col-4 d-flex justify-content-center align-items-center">
             <form method="POST">
-                <input type="hidden" name="movie_name" value="<?= $movie['name'] ?>">
+                <input type="hidden" name="movie_slug" value="<?= $movie['slug'] ?>">
                 <button class="bookingStep" <?= empty($seats) ? "disabled" : "" ?>>COMFIRM</button>
             </form>
         </div>

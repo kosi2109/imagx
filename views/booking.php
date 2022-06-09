@@ -17,7 +17,15 @@
                 </div>
                 <div class="p-2">
                     <h3 class="card-title">Genere</h3>
-                    <p class="card-detail p-0 m-0">Action</p>
+                    <p class="card-detail p-0 m-0">
+                        <?php $string = ''; ?>
+                        <?php foreach ($generes as $genere) : ?>
+                            <?php
+                            $string .= $genere['genere'] . " , ";
+                            ?>
+                        <?php endforeach; ?>
+                        <?= rtrim($string, ", ") ?>
+                    </p>
                 </div>
             </div>
             <div class="d-none d-md-block mt-2">
@@ -177,7 +185,7 @@
                 </div>
                 <div class="col-4 d-flex justify-content-center align-items-center">
 
-                    <a href="/bookings/step2?movie=<?= $movie['name'] ?>">
+                    <a href="/bookings/step2?movie=<?= $movie['slug'] ?>">
                         <button class="bookingStep" disabled="true" id="purchase">Purchase</button>
                     </a>
                 </div>
@@ -276,7 +284,7 @@
         observer.observe(target2);
     }
 
-    
+
 
 
     dateScrollNexBtn.addEventListener('click', () => {
@@ -346,7 +354,7 @@
                 renderSeats();
             }
         }
-        req.open('GET', `/get-seats?movie_name=<?= $movie['name'] ?>&movie_date=${selected_date}&movie_time=${show_time}&movie_id=<?= $movie['id'] ?>`, true);
+        req.open('GET', `/get-seats?movie_date=${selected_date}&movie_time=${show_time}&movie_id=<?= $movie['id'] ?>`, true);
         req.send();
     }
 
@@ -418,9 +426,9 @@
             }
         }
         if (seatArray.length > 0) {
-            data = `movie=<?= $movie['name'] ?>&date=${selected_date}&time=${show_time}&seats=${seatArray}`;
+            data = `movie_slug=<?= $movie['slug'] ?>&date=${selected_date}&time=${show_time}&seats=${seatArray}`;
         } else {
-            data = "movie=<?= $movie['name'] ?>";
+            data = "movie_slug=<?= $movie['slug'] ?>";
         }
         req.open('POST', '/bookings/seathandler', true);
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
