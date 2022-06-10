@@ -61,6 +61,7 @@
         <div class="col-4 d-flex justify-content-center align-items-center">
             <form method="POST">
                 <input type="hidden" name="movie_slug" value="<?= $movie['slug'] ?>">
+                <input type="hidden" name="total" value="<?= $grand_total ?>">
                 <button class="bookingStep" <?= empty($seats) ? "disabled" : "" ?>>COMFIRM</button>
             </form>
         </div>

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 function auth(): array | bool
 {
     $auth = $_SESSION['auth'];
@@ -134,4 +132,33 @@ function login_required() : void
         ]);
         redirectBack();
     }
+}
+
+function setSeatData(array $seats, string $movie_slug , $date , $time) : void
+{
+    $_SESSION['seat_data'][$movie_slug]['seats'] = $seats;
+    $_SESSION['seat_data'][$movie_slug]['date'] = $date;
+    $_SESSION['seat_data'][$movie_slug]['time'] = $time;
+}
+
+function getSeatData(string $movie_slug) : array | null
+{
+    return $_SESSION['seat_data'][$movie_slug];
+}
+
+function deleteSeatData(string $movie_slug) : void
+{
+    unset($_SESSION['seat_data'][$movie_slug]);
+}
+
+function seatsByRole ($seats)
+{
+    $new_seats = [];
+    foreach ($seats as $st) {
+        if($st !== ""){
+            $new_seats[$st[0]][] = $st;
+        }
+    }
+
+    return $new_seats;
 }

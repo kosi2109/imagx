@@ -46,4 +46,52 @@ class Booking extends Model
         return $statement->fetchAll(\PDO::FETCH_ASSOC);                                                    
     }
 
+    public function orders(?string $mid = null,?string $date = null , ?string $time = null)
+    {
+        $query = "SELECT bookings.id,bookings.show_time,bookings.date,                              
+                bookings.seats,bookings.total,movies.name as movie_name,users.username
+                FROM bookings 
+                INNER JOIN movies 
+                ON bookings.movie_id = movies.id 
+                INNER JOIN users 
+                ON bookings.user_id = users.id";
+        
+        if($mid || $date || $time){
+            $query .= " WHERE " ;
+        }
+
+        if ($mid){
+            $query .= "bookings.movie_id = :mid AND ";
+        }
+
+        if($date){
+            $query .= "bookings.date = :date AND ";
+        }
+
+        if($time){
+            $query .= "bookings.show_time = :time AND ";
+        }
+
+        if($mid || $date || $time){
+            $query = rtrim($query," AND ");
+        }
+
+        $statement = $this->pdo->prepare($query);
+
+        if ($mid){
+            $statement->bindValue(':mid',$mid); 
+        }
+
+        if($date){
+            $statement->bindValue(':date',$date);
+        }
+
+        if($time){
+            $statement->bindValue(':time',$time);
+        }   
+                                       
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);                                                    
+    }
+
 }

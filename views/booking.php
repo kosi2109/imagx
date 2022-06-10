@@ -4,7 +4,7 @@
 <!-- enter your html -->
 <div class="container main">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4 col-lg-3">
             <div class="movieDetailCard">
                 <img class="thumbnail" src="<?= $movie['movie_img'] ?>" alt="">
                 <div class="p-2">
@@ -16,12 +16,12 @@
                     <p class="card-detail p-0 m-0"><?= $movie['casts'] ?></p>
                 </div>
                 <div class="p-2">
-                    <h3 class="card-title">Genere</h3>
+                    <h3 class="card-title">Genre</h3>
                     <p class="card-detail p-0 m-0">
                         <?php $string = ''; ?>
-                        <?php foreach ($generes as $genere) : ?>
+                        <?php foreach ($genres as $genre) : ?>
                             <?php
-                            $string .= $genere['genere'] . " , ";
+                            $string .= $genre['genre'] . " , ";
                             ?>
                         <?php endforeach; ?>
                         <?= rtrim($string, ", ") ?>
@@ -60,7 +60,7 @@
             </div>
 
         </div>
-        <div class="col-md-9 px-md-5">
+        <div class="col-md-8 col-lg-9 px-md-5">
             <div class="movieHeader py-2 mb-2">
                 <h1 class="movieName"><?= $movie['name'] ?></h1>
             </div>

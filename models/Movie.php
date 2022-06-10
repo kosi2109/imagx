@@ -27,12 +27,12 @@ class Movie extends Model
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function generes(string $id) : array
+    public function genres(string $id) : array
     {
-        $statement = $this->pdo->prepare("SELECT generes.id,genere FROM movies_generes 
-                                        INNER JOIN generes 
-                                        ON generes.id = movies_generes.genere_id 
-                                        WHERE movies_generes.movie_id = :id");
+        $statement = $this->pdo->prepare("SELECT genres.id,genre FROM movies_genres 
+                                        INNER JOIN genres 
+                                        ON genres.id = movies_genres.genre_id 
+                                        WHERE movies_genres.movie_id = :id");
         $statement->bindValue(':id',$id);
         $statement->execute();
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -77,40 +77,40 @@ class Movie extends Model
         }
     }
 
-    public function syncGeneres(string $movie_id,array | null $generes)
+    public function syncgenres(string $movie_id,array | null $genres)
     {
-        if($generes == null){
-            $statement = $this->pdo->prepare("DELETE FROM movies_generes WHERE movie_id = :movie_id");
+        if($genres == null){
+            $statement = $this->pdo->prepare("DELETE FROM movies_genres WHERE movie_id = :movie_id");
             $statement->bindValue(':movie_id',$movie_id);
             $statement->execute();
             return;
         }
 
-        $generes_md = new Genere();
-        $all_generes = $generes_md->getAll();
-        $all_generes = array_map(function($ti){
+        $genres_md = new Genre();
+        $all_genres = $genres_md->getAll();
+        $all_genres = array_map(function($ti){
             return ''.$ti['id'];
-        },$all_generes);
+        },$all_genres);
         
-        foreach($all_generes as $genere){
-            $is_exist = in_array($genere,$generes);
-            $statement = $this->pdo->prepare("SELECT * FROM movies_generes WHERE movie_id = :movie_id AND genere_id = :genere_id");
+        foreach($all_genres as $genre){
+            $is_exist = in_array($genre,$genres);
+            $statement = $this->pdo->prepare("SELECT * FROM movies_genres WHERE movie_id = :movie_id AND genre_id = :genre_id");
             $statement->bindValue(':movie_id',$movie_id);
-            $statement->bindValue(':genere_id',$genere);
+            $statement->bindValue(':genre_id',$genre);
             $statement->execute();
             $exit_in_db = $statement->fetch(\PDO::FETCH_ASSOC);
             if($is_exist){
                 if(!$exit_in_db){
-                    $statement = $this->pdo->prepare("INSERT INTO movies_generes (movie_id,genere_id) VALUES (:movie_id,:genere_id)");
+                    $statement = $this->pdo->prepare("INSERT INTO movies_genres (movie_id,genre_id) VALUES (:movie_id,:genre_id)");
                     $statement->bindValue(':movie_id',$movie_id);
-                    $statement->bindValue(':genere_id',$genere);
+                    $statement->bindValue(':genre_id',$genre);
                     $statement->execute();
                 }
             }else{
                 if($exit_in_db){
-                    $statement = $this->pdo->prepare("DELETE FROM movies_generes WHERE movie_id = :movie_id AND genere_id = :genere_id");
+                    $statement = $this->pdo->prepare("DELETE FROM movies_genres WHERE movie_id = :movie_id AND genre_id = :genre_id");
                     $statement->bindValue(':movie_id',$movie_id);
-                    $statement->bindValue(':genere_id',$genere);
+                    $statement->bindValue(':genre_id',$genre);
                     $statement->execute();
                 }
             }

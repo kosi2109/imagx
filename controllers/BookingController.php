@@ -27,9 +27,10 @@ class BookingController
         $today_date =  Carbon::now();
         $today_date =  $today_date->toDateString();
         $show_times =  $movies->times($movie['id']);
-        $generes = $movies->generes($movie['id']);
-        $show_date =  $_SESSION['seat_data'][$movie_slug]['date'] ?  $_SESSION['seat_data'][$movie_slug]['date'] : $today_date;
-        $selected_seats = $_SESSION['seat_data'][$movie_slug]['seats'];
+        $genres = $movies->genres($movie['id']);
+        $seat_data = getSeatData($movie_slug);
+        $show_date = $seat_data['date'] ?  $seat_data['date'] : $today_date;
+        $selected_seats = $seat_data['seats'];
         $soldSeats = $bookings->soldSeats("".$movie['id'],$show_date,$show_times[0]['show_time']);
         
         return view('booking',[
@@ -40,7 +41,7 @@ class BookingController
             'soldSeats' => $soldSeats,
             'today_date' => $today_date,
             'show_date' => $show_date,
-            'generes' => $generes
+            'genres' => $genres
         ]);
     }
 
@@ -61,7 +62,7 @@ class BookingController
             var_dump('not found');
             return;
         }
-        $seat_data = $_SESSION['seat_data'][$movie_slug];
+        $seat_data = getSeatData($movie_slug);
         $seats = $seat_data['seats'];
         $date = new Carbon($seat_data['date']);
         $time = new Carbon($seat_data['time']);
@@ -72,16 +73,11 @@ class BookingController
             return redirectBack();
         }
         
-        $new_seats = [];
-        foreach ($seats as $st) {
-            if($st !== ""){
-                $new_seats[$st[0]][] = $st;
-            }
-        }
+        $seats = seatsByRole($seats);
         
         return view('purchase', [
             "movie" => $movie,
-            "seats" => $new_seats,
+            "seats" => $seats,
             "date" => $date->format('d-m-Y'),
             "time" => $time->format('g:i a')
         ]);
@@ -108,7 +104,7 @@ class BookingController
             return redirectBack();
         }
 
-        $seat_data = $_SESSION['seat_data'][$movie_slug];
+        $seat_data = getSeatData($movie_slug);
         $users = new User();
         $user = $users->where(auth()['username'],'username')->getOne();
 
@@ -119,9 +115,10 @@ class BookingController
             'date'=>$seat_data['date'],
             'show_time'=>$seat_data['time'],
             'seats'=> implode(',',$seat_data['seats']),
+            'total'=> request('total'),
         ]);
         if($booking){
-            unset($_SESSION['seat_data'][$movie_slug]);
+            deleteSeatData($movie_slug);
             return redirect('/bookings/step3');
         }else{
             setError([
@@ -143,11 +140,10 @@ class BookingController
         login_required();
         
         if(request('seats')){
-            $_SESSION['seat_data'][request('movie_slug')]['seats'] = explode(',',request('seats'));
-            $_SESSION['seat_data'][request('movie_slug')]['date'] = request('date');
-            $_SESSION['seat_data'][request('movie_slug')]['time'] = request('time');
+            $seats = explode(',',request('seats'));
+            setSeatData($seats,request('movie_slug'),request('date'),request('time'));
         }else{
-            unset($_SESSION['seat_data'][request('movie_slug')]);
+            deleteSeatData(request('movie_slug'));
         }
         echo request('seats');
     }
@@ -155,7 +151,6 @@ class BookingController
     public function getSeats()
     {
         login_required();
-
         $movie_id = request('movie_id');
         $movie_date = request('movie_date');
         $movie_time = request('movie_time');

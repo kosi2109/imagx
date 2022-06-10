@@ -1,13 +1,15 @@
 <?php
 // implement your routes here
 use app\Route;
-use controllers\AdminController;
+use controllers\AdminBookingController;
+use controllers\AdminMovieController;
 use controllers\AuthController;
 use controllers\HomeController;
 use controllers\MovieController;
 use controllers\BookingController;
 use controllers\ProfileController;
 use controllers\ScheduleController;
+use controllers\TimeGenreController;
 
 Route::get('/',[HomeController::class,'index']);
 Route::get('/schedule',[ScheduleController::class,'index']);
@@ -34,9 +36,19 @@ Route::post('/logout',[AuthController::class,'logout']);
 
 
 // admin
-Route::get('/admin',[AdminController::class,'index']);
-Route::get('/admin/edit-movie',[AdminController::class,'edit']);
-Route::post('/admin/edit-movie',[AdminController::class,'update']);
-Route::get('/admin/create-movie',[AdminController::class,'create']);
-Route::post('/admin/create-movie',[AdminController::class,'store']);
-Route::post('/admin/delete-movie',[AdminController::class,'destroy']);
+// movie
+Route::get('/admin/view-movies',[AdminMovieController::class,'index']);
+Route::get('/admin/edit-movie',[AdminMovieController::class,'edit']);
+Route::post('/admin/edit-movie',[AdminMovieController::class,'update']);
+Route::get('/admin/create-movie',[AdminMovieController::class,'create']);
+Route::post('/admin/create-movie',[AdminMovieController::class,'store']);
+Route::post('/admin/delete-movie',[AdminMovieController::class,'destroy']);
+
+// time and genre
+Route::get('/admin/show-time-and-genre',[TimeGenreController::class,'index']);
+Route::post('/admin/delete-time-genre',[TimeGenreController::class,'destroy']);
+Route::post('/admin/update-time-genre',[TimeGenreController::class,'update']);
+Route::post('/admin/create-time-genre',[TimeGenreController::class,'store']);
+
+// admin booking
+Route::get('/admin/view-bookings',[AdminBookingController::class,'index']);

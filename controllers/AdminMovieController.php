@@ -1,11 +1,11 @@
 <?php
 namespace controllers;
 
-use models\Genere;
+use models\Genre;
 use models\Movie;
 use models\ShowTime;
 
-class AdminController
+class AdminMovieController
 {
     public function index()
     {
@@ -43,15 +43,15 @@ class AdminController
         $time_md = new ShowTime();
         $times = $time_md->getAll();
         $show_times = $movie_md->times($movie['id']);
-        $genere_md = new Genere();
-        $generes = $genere_md->getAll();
-        $movie_generes = $movie_md->generes($movie['id']);
+        $genre_md = new genre();
+        $genres = $genre_md->getAll();
+        $movie_genres = $movie_md->genres($movie['id']);
         return view('admin/edit',[
             'movie' => $movie,
             'times' => $times,
             'show_times' => $show_times,
-            'generes' => $generes,
-            'movie_generes' => $movie_generes
+            'genres' => $genres,
+            'movie_genres' => $movie_genres
         ]);
     }
 
@@ -59,11 +59,11 @@ class AdminController
     {
         $time_md = new ShowTime();
         $times = $time_md->getAll();
-        $genere_md = new Genere();
-        $generes = $genere_md->getAll();
+        $genre_md = new Genre();
+        $genres = $genre_md->getAll();
         return view('admin/create',[
             'times' => $times,
-            'generes' => $generes
+            'genres' => $genres
         ]);
     }
 
@@ -71,9 +71,9 @@ class AdminController
     {
         $request = request();
         $times = $request['times'];
-        $generes = $request['generes'];
+        $genres = $request['genres'];
         unset($request['times']);
-        unset($request['generes']);
+        unset($request['genres']);
 
         $movie_md = new Movie();        
         $new_movie = $movie_md->store($request);
@@ -95,12 +95,12 @@ class AdminController
         
         $request = request();
         $times = $request['times']; 
-        $generes = $request['generes'];
+        $genres = $request['genres'];
         unset($request['times']);
-        unset($request['generes']);
+        unset($request['genres']);
         
         $movie_md->syncTimes($request['id'],$times);
-        $movie_md->syncGeneres($request['id'],$generes);
+        $movie_md->syncgenres($request['id'],$genres);
         $update_movie = $movie_md->update($request['id'],$request);
               
 
@@ -144,4 +144,6 @@ class AdminController
         }
 
     }
+
+    
 }

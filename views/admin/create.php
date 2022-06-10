@@ -9,10 +9,10 @@ $title = 'Admin Dashboard' ?>
 <!-- enter your html -->
 <div class="container main">
     <div class="row">
-        <div class="col-md-3 d-none d-md-block">
+        <div class="col-md-4 col-lg-3 d-none d-md-block">
             <?php require_once __DIR__ . "/adminNav.php" ?>
         </div>
-        <div class="col-12 col-md-9">
+        <div class="col-12 col-md-8 col-lg-9">
             <form method="POST" enctype="multipart/form-data">
             <h2>Create Movie</h2>
             <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -89,12 +89,12 @@ $title = 'Admin Dashboard' ?>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label style="font-size: 1.2rem;">Genere</label>
+                    <label style="font-size: 1.2rem;">genre</label>
                     <div class="row">
-                        <?php foreach ($generes as $genere) : ?>
+                        <?php foreach ($genres as $genre) : ?>
                             <div class="col-4 d-flex align-items-center">
-                                <input name="generes[]" class="me-2" id="g-<?= $genere['id'] ?>" type="checkbox" value="<?= $genere['id'] ?>">
-                                <label for="g-<?= $genere['id'] ?>"><?= $genere['genere'] ?></label>
+                                <input name="genres[]" class="me-2" id="g-<?= $genre['id'] ?>" type="checkbox" value="<?= $genre['id'] ?>">
+                                <label for="g-<?= $genre['id'] ?>"><?= $genre['genre'] ?></label>
                             </div>
                         <?php endforeach; ?>
                     </div>

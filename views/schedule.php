@@ -10,10 +10,10 @@
         </div>
         <div class="movieBody">
             <div class="row my-2">
-                <div class="col-md-3">
+                <div class="col-md-5 col-lg-3">
                     <img class="thumbnail" src="<?= $movie['movie_img'] ?>" alt="">
                 </div>
-                <div class="col-md-9 my-2 my-md-0 px-2 d-flex flex-column justify-content-between">
+                <div class="col-md-7 col-lg-9 my-2 my-md-0 px-2 d-flex flex-column justify-content-between">
                     <div>
                         <h2>TIME</h2>
                         <div class="row my-2">
