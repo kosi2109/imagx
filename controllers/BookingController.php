@@ -15,16 +15,18 @@ class BookingController
         
         $movie_slug = request('movie');
         if (!$movie_slug){
-            setError([
-                "message" => "Please select one movie .",
-            ]);
+            setError("Please select one movie");
             return redirectBack();
         }
         $movies = new Movie();
-        $bookings = new Booking();
         $movie = $movies->where($movie_slug,'slug')->getOne();
-        $period = new CarbonPeriod($movie['start_date'],$movie['end_date']);
         $today_date =  Carbon::now();
+        if($movie['can_book_at'] > $today_date->format('Y-m-d') ){
+            // check for is reach can book date
+            return redirectBack();
+        } 
+        $bookings = new Booking();
+        $period = new CarbonPeriod($movie['start_date'],$movie['end_date']);
         $today_date =  $today_date->toDateString();
         $show_times =  $movies->times($movie['id']);
         $genres = $movies->genres($movie['id']);
@@ -51,9 +53,8 @@ class BookingController
 
         $movie_slug = request('movie');
         if (!$movie_slug){
-            setError([
-                "message" => "Please select one movie .",
-            ]);
+            
+            setError("Please select one movie");
             return redirectBack();
         }
         $movies = new Movie();
@@ -67,9 +68,7 @@ class BookingController
         $date = new Carbon($seat_data['date']);
         $time = new Carbon($seat_data['time']);
         if($seat_data == null | $seats == null | $date == null | $time == null ){
-            setError([
-                "message" => "Missing Some data .",
-            ]);
+            setError("Missing Some data");
             return redirectBack();
         }
         
@@ -89,18 +88,14 @@ class BookingController
 
         $movie_slug = request('movie_slug');
         if(!$movie_slug){
-            setError([
-                "message" => "Please select one movie .",
-            ]);
+            setError("Please select one movie .");
             return redirectBack();
         }
 
         $movies = new Movie();
         $movie = $movies->where($movie_slug,'slug')->getOne();
         if (!$movie){
-            setError([
-                "message" => "Movie Not Found .",
-            ]);
+            setError("Movie Not Found");
             return redirectBack();
         }
 
@@ -109,6 +104,37 @@ class BookingController
         $user = $users->where(auth()['username'],'username')->getOne();
 
         $bookings = new Booking();
+
+        // backend check for sold seats
+        $all_bookings = $bookings
+            ->where($movie['id'],'movie_id')
+            ->andWhere($seat_data['date'],'date')
+            ->andWhere($seat_data['time'],'show_time')
+            ->get();
+
+        $soldSeats = [];
+        foreach($all_bookings as $booking){
+            $booked_seats = explode(',',$booking['seats']);
+            foreach($booked_seats as $st){
+                $soldSeats[] = $st;
+            }
+        }
+
+        $not_available_seats = [];
+
+        foreach($seat_data['seats'] as $st){
+            if(in_array($st,$soldSeats)){
+                $not_available_seats[] = $st;
+            }
+        };
+
+        if(count($not_available_seats) > 0){
+            setError(implode(',',$not_available_seats). " are Not Available");
+            return redirectBack();
+        }
+
+        // end checking
+
         $booking = $bookings->store([
             'user_id'=>$user['id'],
             'movie_id'=> "".$movie['id'],
@@ -121,9 +147,7 @@ class BookingController
             deleteSeatData($movie_slug);
             return redirect('/bookings/step3');
         }else{
-            setError([
-                "message" => "Sorry , Can't purchase . Try Again . ",
-            ]);
+            setError("Sorry , Can't purchase . Try Again");
             return redirectBack();
         }
 

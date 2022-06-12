@@ -9,26 +9,9 @@ class AdminMovieController
 {
     public function index()
     {
+        !is_admin() && redirectBack() ; 
         $movie_md = new Movie();
         $movies = $movie_md->getAll();
-        // $showing = [];
-        // $commingsoon = [];
-        // $today_date =  Carbon::now();
-        // foreach($movies as $movie){
-        //     $start_date = new Carbon($movie['start_date']);
-        //     $end_date = new Carbon($movie['end_date']);
-        //     if($start_date > $today_date){
-        //         $commingsoon[] = $movie;
-        //     }
-        //     // else if($end_date < $today_date){
-        //     //     if movie was showed
-        //     //     i did't implement because when you look up this project
-        //     //     all movies will done
-        //     // }
-        //     else{
-        //         $showing[] = $movie;
-        //     }
-        // }
 
         return view('admin/index',[
             'movies' => $movies
@@ -37,9 +20,14 @@ class AdminMovieController
 
     public function edit()
     {
+        !is_admin() && redirectBack(); 
+
         $slug = request('slug');
         $movie_md = new Movie();
         $movie = $movie_md->where($slug,'slug')->getOne();
+        if(!$movie){
+            return redirectBack();
+        }
         $time_md = new ShowTime();
         $times = $time_md->getAll();
         $show_times = $movie_md->times($movie['id']);
@@ -57,6 +45,8 @@ class AdminMovieController
 
     public function create()
     {
+        !is_admin() && redirectBack(); 
+
         $time_md = new ShowTime();
         $times = $time_md->getAll();
         $genre_md = new Genre();
@@ -69,28 +59,31 @@ class AdminMovieController
 
     public function store()
     {
+        !is_admin() && redirectBack() ; 
         $request = request();
         $times = $request['times'];
         $genres = $request['genres'];
+        $movie_md = new Movie();        
         unset($request['times']);
         unset($request['genres']);
-
-        $movie_md = new Movie();        
+        $request['slug'] = trim($request['slug']); 
         $new_movie = $movie_md->store($request);
+        $movie_md->syncgenres($new_movie['id'],$genres);
+        $movie_md->syncTimes($new_movie['id'],$times);
 
         if($new_movie){
             $_SESSION["success"] = $new_movie['name']." was successfully added .";
-            return redirect('/admin');
+            return redirect('/admin/view-movies');
         }else{
-            setError([
-                "message" => "Something Wrong",
-            ]);
+            setError("Something Wrong");
             return redirectBack();
         }
     }
 
     public function update()
     {
+        !is_admin() && redirectBack(); 
+
         $movie_md = new Movie(); 
         
         $request = request();
@@ -98,7 +91,7 @@ class AdminMovieController
         $genres = $request['genres'];
         unset($request['times']);
         unset($request['genres']);
-        
+        $request['slug'] = trim($request['slug']); 
         $movie_md->syncTimes($request['id'],$times);
         $movie_md->syncgenres($request['id'],$genres);
         $update_movie = $movie_md->update($request['id'],$request);
@@ -106,30 +99,25 @@ class AdminMovieController
 
         if($update_movie){
             $_SESSION["success"] = $update_movie['name']." was successfully updated .";
-            return redirect('/admin');
+            return redirect("/admin/edit-movie?slug=".$update_movie['slug']);
         }else{
-            setError([
-                "message" => "Something Wrong",
-            ]);
+            setError("Something Wrong");
             return redirectBack();
         }
     }
 
     public function destroy()
     {
+        !is_admin() && redirectBack(); 
         $id = request('movie_id');
         if(!$id){
-            setError([
-                'message' => "Missing some data"
-            ]);
+            setError("Missing some data");
             return redirectBack();
         }
         $movie_md = new Movie();
         $movie = $movie_md->where($id)->getOne();
         if(!$movie){
-            setError([
-                'message' => "Movie Not Found"
-            ]);
+            setError("Movie Not Found");
             return redirectBack();
         }
         $deleted = $movie_md->delete($id);
@@ -137,9 +125,7 @@ class AdminMovieController
             $_SESSION['success'] = $movie['name'] . "was successfully deleted";
             return redirect('/admin');
         }else{
-            setError([
-                'message' => "Something went wrong"
-            ]);
+            setError("Something went wrong");
             return redirectBack();
         }
 

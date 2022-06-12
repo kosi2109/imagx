@@ -34,6 +34,12 @@ class QueryBuilder
         return $this;
     }
 
+    public function andWhere($value, ?string $column = 'id', ?string $operator = '=')
+    {
+        $this->query .= "AND $column $operator '$value' ";
+        return $this;
+    }
+
     public function get()
     {
         $statement = $this->pdo->prepare($this->query);

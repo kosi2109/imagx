@@ -13,7 +13,14 @@
 }
 
 .main{
-    padding: 130px 20px 10px 20px;
+    padding: 130px 20px 50px 20px;
+}
+
+
+@media screen and (min-width:768px) {
+    .main{
+        padding: 130px 20px 10px 20px;
+    }
 }
 
 .logocontainer{
@@ -552,10 +559,12 @@
 
 /* admin */
 .adminNav{
-    border: 1px solid var(--red);
+    position: sticky !important;
+    top: 120px;
+    border-right: 1px solid var(--red);
 }
 
-.adminNav a{
+.adminNav a,.mobileNav a{
     color: var(--white);
 }
 
@@ -572,8 +581,6 @@
     object-fit: contain;
     transition: all 0.5s ease;
 }
-
-
 
 .movieCard:hover > .mov_img img{
     transition: all 0.5s ease;
@@ -593,3 +600,17 @@
 .action.danger{
     color: var(--red);
 }
+
+.mobileNav{
+    color: var(--white);
+    background-color: var(--black);
+}
+
+.modalColse{
+    color: var(--white);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 20px;
+}
+

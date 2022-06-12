@@ -36,9 +36,7 @@ class AuthController
                 "username" => request("username"),
                 "full_name" => request("full_name"),
             ]);
-            setError([
-                "message" => "All fields are required",
-            ]);
+            setError("All fields are required");
             return redirectBack();
         }
 
@@ -47,9 +45,7 @@ class AuthController
                 "username" => request("username"),
                 "full_name" => request("full_name"),
             ]);
-            setError([
-                "message" => "Password doesn't match",
-            ]);
+            setError("Password doesn't match");
             return redirectBack();
         }
         $users = new User();
@@ -59,9 +55,7 @@ class AuthController
                 "username" => request("username"),
                 "full_name" => request("full_name"),
             ]);
-            setError([
-                "message" => "User already exist .",
-            ]);
+            setError("User already exist");
             return redirectBack();
         }
         $req = [
@@ -88,18 +82,14 @@ class AuthController
         if (!$user) 
         {
             setOld(['username' => $username]);
-            setError([
-                "message" => "User Not Found .",
-            ]);
+            setError("User Not Found");
             return redirectBack(["test" => "test"]);
         };
 
         if (!password_verify($password, $user['password'])) 
         {
             setOld(['username' => $username]);
-            setError([
-                "message" => "Wrong User Creditial",
-            ]);
+            setError("Wrong User Creditial");
             return redirectBack();
         };  
 

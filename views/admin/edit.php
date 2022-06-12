@@ -9,10 +9,10 @@ $title = 'Admin Dashboard' ?>
 <!-- enter your html -->
 <div class="container main">
     <div class="row">
-        <div class="col-md-4 col-lg-3 d-none d-md-block">
+        <div class="d-none d-md-block col-md-5 col-lg-4">
             <?php require_once __DIR__ . "/adminNav.php" ?>
         </div>
-        <div class="col-12 col-md-8 col-lg-9">
+        <div class="col-12 col-md-7 col-lg-8">
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $movie['id'] ?>">
                 <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -109,38 +109,41 @@ $title = 'Admin Dashboard' ?>
                     </button>
                 </div>
             </form>
-            
+
         </div>
     </div>
+    <?php require_once __DIR__ . "/mobileNav.php" ?>
 </div>
 
 <!-- Modal -->
 <div class="modal fade " id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModal">Delete Movie</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            <form id="deleteForm" action="/admin/delete-movie" method="POST">
-                <input type="hidden" name="movie_id" value="<?= $movie['id'] ?>">
-            </form>
-            <p>Are You Sure to Delete <?= $movie['name'] ?></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="deleteComfirm" class="btn">Save changes</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModal">Delete Movie</h5>
+                <button class="modalColse" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" action="/admin/delete-movie" method="POST">
+                    <input type="hidden" name="movie_id" value="<?= $movie['id'] ?>">
+                </form>
+                <p>Are You Sure to Delete <?= $movie['name'] ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="deleteComfirm" class="btn">Save changes</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
     const deleteForm = document.getElementById('deleteForm');
     const deleteComfirm = document.getElementById('deleteComfirm');
-    deleteComfirm.addEventListener('click',function(){
-        deleteForm.submit();    
+    deleteComfirm.addEventListener('click', function() {
+        deleteForm.submit();
     })
 </script>
 

@@ -21,8 +21,8 @@ class MovieController
             }
             // else if($end_date < $today_date){
             //     if movie was showed
-            //     i did't implement because when you look up this project
-            //     all movies will done
+            //     i did't implement because when you look at this project
+            //     all movies will gone
             // }
             else{
                 $showing[] = $movie;

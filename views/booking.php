@@ -388,15 +388,16 @@
 
         seats.forEach((seat) => {
             seat.addEventListener('click', () => {
+                // fontend check for sold seats
                 <?php if (auth()) : ?>
                     let seatNo = seat.dataset.seat;
                     let is_sold = sold_seats.includes(seatNo);
                     let is_selected = seatArray.includes(seatNo);
-                    if (!is_selected && !sold_seats.includes(seatNo)) {
+                    if (!is_selected && !is_sold) {
                         seatArray.push(seatNo)
                         seat.src = "<?= asset('assets/available.png') ?>";
 
-                    } else if (is_selected && !sold_seats.includes(seatNo)) {
+                    } else if (is_selected && !is_sold) {
                         seatArray = seatArray.filter(se => se !== seatNo)
                         seat.src = "<?= asset('assets/seat.png') ?>";
                     }
@@ -411,8 +412,6 @@
         })
 
     }
-
-
 
 
 

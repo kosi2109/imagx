@@ -5,8 +5,11 @@
 <div class="container main">
     
     <?php if(!empty($bookings)) : ?>
-    <div class="movieHeader py-2 mb-2">
-        <h1 class="movieName"><?= auth()['username'] ?>'s Order List</h1>
+    <div class="movieHeader d-flex py-2 mb-2">
+        <h1 class="movieName me-3"><?= auth()['username'] ?>'s Order List</h1>
+        <form action="/logout" method="POST">
+            <button class="btn signinBtn">Logout</button>
+        </form>
     </div>
     <?php foreach ($bookings as $key => $booking) : ?>
         <div class="row purchase py-5" <?= $key != 0 ? "style='border-top: 1px dotted grey'" : '' ?>  >

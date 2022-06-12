@@ -46,7 +46,7 @@ class Booking extends Model
         return $statement->fetchAll(\PDO::FETCH_ASSOC);                                                    
     }
 
-    public function orders(?string $mid = null,?string $date = null , ?string $time = null)
+    public function orders(?string $date = null , ?string $time = null , ?string $mid = null)
     {
         $query = "SELECT bookings.id,bookings.show_time,bookings.date,                              
                 bookings.seats,bookings.total,movies.name as movie_name,users.username

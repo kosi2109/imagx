@@ -38,9 +38,7 @@ class TimeGenreController
             $_SESSION['success'] = "Successfully Deleted";
             return redirectBack();
         }else{
-            setError([
-                'message' => "Can't delete"
-            ]);
+            setError("Can't delete");
             return redirectBack();
         }
 
@@ -66,9 +64,7 @@ class TimeGenreController
             $_SESSION['success'] = "Successfully Updated";
             return redirectBack();
         }else{
-            setError([
-                'message' => "Can't update item"
-            ]);
+            setError("Can't update item");
             return redirectBack();
         }
 
@@ -93,9 +89,7 @@ class TimeGenreController
             $_SESSION['success'] = "Successfully Added";
             return redirectBack();
         }else{
-            setError([
-                'message' => "Can't Add"
-            ]);
+            setError("Can't Add");
             return redirectBack();
         }
 

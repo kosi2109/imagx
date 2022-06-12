@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
+use models\User;
+
 function auth(): array | bool
 {
-    $auth = $_SESSION['auth'];
+    $auth = isset($_SESSION['auth']);
     if (!$auth) {
         return false;
     }
 
-    return $auth;
+    return $_SESSION['auth'];
 }
 
 function dd($something): void
@@ -92,7 +94,7 @@ function redirect(?string $uri = '/'): void
 
 function redirectBack(): void
 {
-    if ($_SERVER['HTTP_REFERER'] == null) {
+    if (!isset($_SERVER['HTTP_REFERER'])) {
         header('Location: /');
     } else {
         header('Location: ' . $_SERVER['HTTP_REFERER']);
@@ -115,23 +117,39 @@ function old(string | int $key): string | int | null
 
 function setError($value)
 {
-    $_SESSION['error'] = $value;
+    $_SESSION['error'][] = $value;
 }
 
-function error(string | int $key)
+function error()
 {
-    return $_SESSION['error'][$key];
+    if(!isset($_SESSION['error'])){
+        return false;
+    }
+    return $_SESSION['error'];
+
 }
 
-function login_required() : void
+function login_required()
 {
     $auth = auth();
     if (!$auth) {
-        setError([
-            "message" => "Login required",
-        ]);
         redirectBack();
     }
+}
+
+function is_admin()
+{
+    $auth = auth();
+    if (!$auth) {
+        return false ;
+    }
+
+    $user = new User();
+    $user = $user->where($auth['username'],'username')->getOne();
+    if(!$user['is_admin']){
+        return false;
+    }
+    return true;
 }
 
 function setSeatData(array $seats, string $movie_slug , $date , $time) : void
