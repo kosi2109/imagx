@@ -33,6 +33,8 @@ Route::post('/login',[AuthController::class,'loginStore']);
 Route::get('/register',[AuthController::class,'register']);
 Route::post('/register',[AuthController::class,'registerStore']);
 Route::post('/logout',[AuthController::class,'logout']);
+Route::get('/change-password',[AuthController::class,'changePassword']);
+Route::post('/change-password',[AuthController::class,'changePasswordStore']);
 
 
 // admin
@@ -52,3 +54,4 @@ Route::post('/admin/create-time-genre',[TimeGenreController::class,'store']);
 
 // admin booking
 Route::get('/admin/view-bookings',[AdminBookingController::class,'index']);
+Route::get('/admin/view-users',[AdminBookingController::class,'users']);

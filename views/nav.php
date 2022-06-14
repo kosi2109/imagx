@@ -10,13 +10,13 @@
                 <li><a href="/schedule" class="nav-link">Schedule</a></li>
                 <li><a href="/movies" class="nav-link">Movies</a></li>
                 <?php if(is_admin()) : ?>
-                    <li><a href="/admin/view-movies" class="nav-link">Dashboard</a></li>
+                    <li><a href="/admin/view-movies" class="nav-link">Admin</a></li>
                 <?php elseif(auth()) : ?>
                     <li><a href="/profile" class="nav-link">Profile</a></li>
                 <?php endif ; ?>
             </ul>
             <?php if(auth()) :?>
-                <form class="d-md-none d-lg-block" action="/logout" method="POST">
+                <form action="/logout" method="POST">
                     <button class="btn signinBtn">Logout</button>
                 </form>
             <?php else:?>

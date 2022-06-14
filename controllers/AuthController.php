@@ -31,7 +31,7 @@ class AuthController
 
     public function registerStore()
     {
-        if (request("username") == "" | request("full_name") == "" | request("password") == "" | request("password2") == "") {
+        if (request("email") == "" |request("username") == "" | request("full_name") == "" | request("password") == "" | request("password2") == "") {
             setOld([
                 "username" => request("username"),
                 "full_name" => request("full_name"),
@@ -44,16 +44,18 @@ class AuthController
             setOld([
                 "username" => request("username"),
                 "full_name" => request("full_name"),
+                'email' => request('email'),
             ]);
             setError("Password doesn't match");
             return redirectBack();
         }
         $users = new User();
-        $user = $users->where(request('username'), 'username')->getOne();
+        $user = $users->where(request('username'), 'username')->orWhere(request('email'), 'email')->getOne();
         if ($user) {
             setOld([
                 "username" => request("username"),
                 "full_name" => request("full_name"),
+                'email' => request('email'),
             ]);
             setError("User already exist");
             return redirectBack();
@@ -61,10 +63,15 @@ class AuthController
         $req = [
             'username' => request('username'),
             'full_name' => request('full_name'),
+            'email' => request('email'),
             'password' => password_hash(request('password'), PASSWORD_DEFAULT),
         ];
 
-        $users->store($req);
+        $user = $users->store($req);
+        if(!$user){
+            setError("Fail to create account");
+            return redirectBack(); 
+        }
         $_SESSION["success"] = "Account has been successfully created .";
         return redirect("/login");
     }
@@ -100,5 +107,29 @@ class AuthController
         return true;
     }
 
+    public function changePassword()
+    {
+        return view('auth/changePassword');
+    }
+
+    public function changePasswordStore()
+    {
+        if(request('new_password') != request('com_password')){
+            setError("Password doesn't match");
+            return redirectBack();
+        }
+        $users = new User();
+        $user = $users->where(auth()['username'], 'username')->getOne();
+        
+        if($this->attempt($user['username'],request('old_password'))){
+            $user['password'] = password_hash(request('new_password'), PASSWORD_DEFAULT);
+            $users->update($user['id'],$user);
+            $_SESSION['success'] = "Password successfully updated";
+            return redirectBack();
+        }else{
+            setError("Fail to update Password");
+            return redirectBack();
+        }
+    }
 
 }

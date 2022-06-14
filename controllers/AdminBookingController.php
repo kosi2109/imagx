@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use models\Booking;
 use models\Movie;
 use models\ShowTime;
+use models\User;
 
 class AdminBookingController
 {
@@ -31,6 +32,16 @@ class AdminBookingController
             'times' => $time_md->getAll(),
             'bookings' => $bookings,
             'date' => $date,
+        ]);
+    }
+
+    public function users()
+    {
+        $user_md = new User();
+        $users = $user_md->getAll();
+
+        return view('admin/users',[
+            "users" => $users
         ]);
     }
 }

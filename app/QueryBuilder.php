@@ -40,6 +40,12 @@ class QueryBuilder
         return $this;
     }
 
+    public function orWhere($value, ?string $column = 'id', ?string $operator = '=')
+    {
+        $this->query .= "OR $column $operator '$value' ";
+        return $this;
+    }
+
     public function get()
     {
         $statement = $this->pdo->prepare($this->query);
@@ -51,7 +57,7 @@ class QueryBuilder
     {
         $statement = $this->pdo->prepare($this->query);
         $statement->execute();
-        return $statement->fetch();
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function store(?array $values = null)
@@ -65,7 +71,7 @@ class QueryBuilder
             $columns = "";
             $query_string = "";
             foreach ($this->columns as $column) {
-                if ($column != "id") {
+                if (($column != "id") and  ($column != "is_admin")) {
                     $query_string .= ":$column, ";
                     $columns .= "$column, ";
                 }

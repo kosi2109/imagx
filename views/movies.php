@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-bd my-2">
                     <h2><?= $movie['name'] ?></h2>
-                    <h3><?= $movie['runtime'] ?> mins | superhero</h3>
+                    <h3><?= $movie['runtime'] ?> mins</h3>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="card-bd my-2">
                     <h2><?= $movie['name'] ?></h2>
-                    <h3><?= $movie['runtime'] ?> mins | superhero</h3>
+                    <h3><?= $movie['runtime'] ?> mins </h3>
                 </div>
             </div>
         </div>

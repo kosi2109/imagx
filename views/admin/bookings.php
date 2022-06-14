@@ -49,9 +49,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($bookings as $booking) : ?>
+                            <?php foreach ($bookings as $key => $booking) : ?>
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row"><?= $key+1 ?></th>
                                     <td><?= $booking['username'] ?></td>
                                     <td><?= $booking['seats'] ?></td>
                                     <td><?= $booking['date'] ?></td>

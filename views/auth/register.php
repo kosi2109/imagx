@@ -11,6 +11,7 @@
             <form action="/register" method="POST" class="mb-5 d-flex flex-column">
                 <input required value="<?= old('username') ? old('username') : '' ?>" class="mb-4 input" type="text" name="username" placeholder="Username">
                 <input required value="<?= old('full_name') ? old('full_name') : '' ?>" class="mb-4 input" type="text" name="full_name" placeholder="FullName">
+                <input required value="<?= old('email') ? old('email') : '' ?>" class="mb-4 input" type="email" name="email" placeholder="Email">
                 <input required class="mb-4 input" type="password" name="password" placeholder="Password">
                 <input required class="mb-4 input" type="password" name="password2" placeholder="Comfirm Password">
                 <button class="btn">Register</button>

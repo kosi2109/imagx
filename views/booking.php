@@ -66,7 +66,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-lg-6 user-select-none">
-                    <h3 class="dateTitle">Date</h3>
+                    <h3 class="dateTitle"><?= $movie['start_date'] ." to ".  $movie['end_date']  ?> </h3>
                     <div class="d-flex justify-content-start align-items-center">
                         <button id="dateScrollBacBtn" class="dateScrollBtn">
                             <i class="fa-solid fa-caret-left"></i>
@@ -130,23 +130,9 @@
                         <div class="col-10">
                             <div class="row mb-2">
                                 <?php foreach (range(1, 12) as $col) : ?>
-                                    <!-- middle seat -->
-                                    <?php if ($col == 6) : ?>
-                                        <div class="col-1 p-0 p-md-1 left-end-seat">
-                                            <img class='me-2 seat' data-seat="<?= chr($letterAscii) . $col ?>" width='20' height='20' src="<?= asset('assets/seat.png') ?>" alt='image'>
-
-                                        </div>
-                                        <!-- middle seat -->
-                                    <?php elseif ($col == 7) : ?>
-                                        <div class="col-1 p-0 p-md-1 right-end-seat">
-                                            <img class='me-2 seat' data-seat="<?= chr($letterAscii) . $col  ?>" width='20' height='20' src="<?= asset('assets/seat.png') ?>" alt='image'>
-                                        </div>
-                                    <?php else : ?>
-                                        <div class="col-1 p-0 p-md-1">
-                                            <img class='me-2 seat' data-seat="<?= chr($letterAscii) . $col  ?>" width='20' height='20' src="<?= asset('assets/seat.png') ?>" alt='image'>
-                                        </div>
-                                    <?php endif; ?>
-
+                                    <div class="col-1 p-0 p-md-1">
+                                        <img class='me-2 seat' data-seat="<?= chr($letterAscii) . $col  ?>" width='20' height='20' src="<?= asset('assets/seat.png') ?>" alt='image'>
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
