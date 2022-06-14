@@ -37,6 +37,7 @@ class AdminBookingController
 
     public function users()
     {
+        !is_admin() && redirectBack() ; 
         $user_md = new User();
         $users = $user_md->getAll();
 

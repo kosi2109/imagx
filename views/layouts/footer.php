@@ -10,11 +10,13 @@
                 }).showToast();
             <?php endforeach ; ?>
         <?php endif ;?>
-        <?php if(isset($_SESSION["success"])) :?>
-            Toastify({
-            text: "<?= $_SESSION["success"] ?>",
-            className: "info",
-            }).showToast();
+        <?php if(success()) :?>
+            <?php foreach(success() as $success) : ?>
+                Toastify({
+                text: "<?= $success ?>",
+                className: "success",
+                }).showToast();
+            <?php endforeach ; ?>
         <?php endif ;?>
     </script>
 </body>

@@ -5,10 +5,7 @@ namespace app;
 
 class DB
 {
-    public function __construct(private array $config)
-    {
-        
-    }
+    public function __construct(private array $config){}
 
     public function connect()
     {

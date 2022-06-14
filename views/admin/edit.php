@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 
-$title = 'Admin Dashboard' ?>
+$title = 'Edit Movie' ?>
 <?php require_once __DIR__ . "/../layouts/header.php" ?>
 <?php require_once __DIR__ . "/../nav.php" ?>
 
@@ -67,11 +67,17 @@ $title = 'Admin Dashboard' ?>
 
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-3">
                     <div class="d-flex ">
-                        <img width="15%" src="<?= $movie['movie_img'] ?>" alt="<?= $movie['name'] ?>">
-                        <div class="d-flex flex-column justify-content-center input-div">
-                            <input id="movie_img" class="text-black" type="file" name="movie_img">
-                            <input id="movie_img" value="<?= $movie['movie_img'] ?>" class="text-black" type="text" name="movie_img">
+                        <img width="15%" class="me-3" src="<?= $movie['movie_img'] ?>" alt="<?= $movie['name'] ?>">
+                        <div class="d-flex flex-column" style="width: 85%;">
+                            <div class="form-check form-switch">
+                                <input name="use_url" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Use Image Url</label>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <input value="<?= $movie['movie_img'] ?>" id="movie_img" class="text-black form-control" type="file" name="movie_img">
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
 
@@ -133,7 +139,7 @@ $title = 'Admin Dashboard' ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="deleteComfirm" class="btn">Save changes</button>
+                <button type="button" id="deleteComfirm" class="btn">Delete</button>
             </div>
         </div>
     </div>
@@ -145,6 +151,22 @@ $title = 'Admin Dashboard' ?>
     deleteComfirm.addEventListener('click', function() {
         deleteForm.submit();
     })
+    const movie_img  = document.getElementById('movie_img');
+    const swit = document.getElementById('flexSwitchCheckDefault');
+    swit.addEventListener('change',()=>{
+        if(swit.checked){
+            movie_img.setAttribute('type','text')
+        }else{
+            movie_img.setAttribute('type','file')
+        }
+
+    })
+    if(swit.checked){
+            movie_img.setAttribute('type','text')
+    }else{
+            movie_img.setAttribute('type','file')
+    }
 </script>
+
 
 <?php require_once __DIR__ . "/../layouts/footer.php" ?>

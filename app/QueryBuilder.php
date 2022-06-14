@@ -10,10 +10,9 @@ class QueryBuilder
     protected $table;
     protected $query;
     protected $columns;
-    public function __construct()
-    {
-    }
+    public function __construct(){}
 
+    // get columns name from tables
     public function getColumns()
     {
         $statement = $this->pdo->prepare("DESCRIBE $this->table");
@@ -60,6 +59,7 @@ class QueryBuilder
         return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
+    // store data depend on columns dynamically
     public function store(?array $values = null)
     {
         try {
@@ -86,10 +86,11 @@ class QueryBuilder
             $statement->execute();
             return $this->where($this->pdo->lastInsertId())->getOne();
         } catch (\Throwable $th) {
-            var_dump("err at add");
+            return false;
         }
     }
 
+    // update data depend on columns dynamically
     public function update(string $id, array $values = null) 
     {
         try {

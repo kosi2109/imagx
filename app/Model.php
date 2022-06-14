@@ -3,11 +3,10 @@ declare(strict_types=1);
 namespace app;
 use app\QueryBuilder;
 
+
 class Model extends QueryBuilder
 {
-    public function __construct()
-    {
-    }
+    public function __construct(){}
 
     protected function setPDO($pdo)
     {
@@ -19,7 +18,7 @@ class Model extends QueryBuilder
         $this->table = $table;
     }
 
-    // to get table name 
+    // to get table name dynamically
     protected function getTableNameFromClassName() : string
     {
         $abs_path = explode('\\',get_class($this)) ;

@@ -12,6 +12,7 @@ class Route
         
     }
 
+    // call method or function on uri
     public static function bild(string $uri, string $method = "GET") : void
     {
         if(isset(self::$routes[$method][$uri])){
@@ -24,11 +25,13 @@ class Route
                 $controller->$method();  
                 return;  
             }
-        }else{  
-            var_dump("not found");
+        }else{
+            //404
+            view("error");
         }
     }
     
+
     public static function get(string $uri , callable|array $callback) : void
     {
         if($uri != "/"){

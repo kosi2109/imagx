@@ -21,7 +21,6 @@ class AdminMovieController
     public function edit()
     {
         !is_admin() && redirectBack(); 
-
         $slug = request('slug');
         $movie_md = new Movie();
         $movie = $movie_md->where($slug,'slug')->getOne();
@@ -46,7 +45,6 @@ class AdminMovieController
     public function create()
     {
         !is_admin() && redirectBack(); 
-
         $time_md = new ShowTime();
         $times = $time_md->getAll();
         $genre_md = new Genre();
@@ -61,20 +59,32 @@ class AdminMovieController
     {
         !is_admin() && redirectBack() ; 
         $request = request();
+        setOld(request());
+        if(!request('use_url')){
+            $img = storage($_FILES['movie_img']);
+            $request['movie_img'] = $img;
+        }
         $times = $request['times'];
         $genres = $request['genres'];
-        $movie_md = new Movie();        
+        $movie_md = new Movie();
+                
         unset($request['times']);
         unset($request['genres']);
+        unset($request['use_url']);
+
         $request['slug'] = trim($request['slug']); 
         $new_movie = $movie_md->store($request);
-        $movie_md->syncgenres($new_movie['id'],$genres);
-        $movie_md->syncTimes($new_movie['id'],$times);
-
-        if($new_movie){
-            $_SESSION["success"] = $new_movie['name']." was successfully added .";
+        if(!$new_movie){    
+            setError("Something Wrong");
+            return redirectBack();
+        }
+        $genre = $movie_md->syncgenres($new_movie['id'],$genres);
+        $time = $movie_md->syncTimes($new_movie['id'],$times);
+        if($genre && $time){
+            setSuccess($new_movie['name']." was successfully added .");
             return redirect('/admin/view-movies');
         }else{
+            setOld(request());
             setError("Something Wrong");
             return redirectBack();
         }
@@ -82,23 +92,36 @@ class AdminMovieController
 
     public function update()
     {
-        !is_admin() && redirectBack(); 
-
-        $movie_md = new Movie(); 
+        !is_admin() && redirectBack();
         
+        if(request('start_date') >= request('end_date')){
+            setError("End Date must greater than start date");
+            return redirectBack();
+        }
+        $movie_md = new Movie(); 
         $request = request();
         $times = $request['times']; 
         $genres = $request['genres'];
+
+        if(!request('use_url')){
+            $img = storage($_FILES['movie_img']);
+            $request['movie_img'] = $img;
+        }
+        // times and genres tables are sprit so we don't need here
         unset($request['times']);
         unset($request['genres']);
-        $request['slug'] = trim($request['slug']); 
+        unset($request['use_url']);
+
+        
+        // add data to times and genre table base on movie
         $movie_md->syncTimes($request['id'],$times);
         $movie_md->syncgenres($request['id'],$genres);
+
+        $request['slug'] = trim($request['slug']); 
         $update_movie = $movie_md->update($request['id'],$request);
               
-
         if($update_movie){
-            $_SESSION["success"] = $update_movie['name']." was successfully updated .";
+            setSuccess($update_movie['name']." was successfully updated .");
             return redirect("/admin/edit-movie?slug=".$update_movie['slug']);
         }else{
             setError("Something Wrong");
@@ -122,8 +145,8 @@ class AdminMovieController
         }
         $deleted = $movie_md->delete($id);
         if($deleted){
-            $_SESSION['success'] = $movie['name'] . "was successfully deleted";
-            return redirect('/admin');
+            setSuccess($movie['name'] . "was successfully deleted");
+            return redirect('/admin/view-movies');
         }else{
             setError("Something went wrong");
             return redirectBack();

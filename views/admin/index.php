@@ -8,7 +8,7 @@
             <?php require_once __DIR__ . "/adminNav.php" ?>
         </div>
         <div class="col-12 col-md-7 col-lg-8">
-            <a href="">
+            <a href="/admin/create-movie">
                 <button class="btn mb-2">Create</button>
             </a>
             <div class="row">

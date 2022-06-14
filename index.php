@@ -15,6 +15,7 @@ require_once "./utils.php";
 require_once "./routes/routers.php";
 
 $config = new Config();
+// i don't want to initalize pdo again and agin so I bild one to app
 $db = new DB($config->getDataBaseConfig());
 $pdo = $db->connect();
 $app = new App($pdo);

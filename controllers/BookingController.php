@@ -12,7 +12,6 @@ class BookingController
 {
     public function booking()
     {
-        
         $movie_slug = request('movie');
         if (!$movie_slug){
             setError("Please select one movie");
@@ -174,7 +173,6 @@ class BookingController
 
     public function getSeats()
     {
-        login_required();
         $movie_id = request('movie_id');
         $movie_date = request('movie_date');
         $movie_time = request('movie_time');

@@ -1,4 +1,4 @@
-<?php $title = "Schedule" ?>
+<?php $title = $movie['name'] ?>
 <?php require_once __DIR__ . "/layouts/header.php" ?>
 <?php require_once __DIR__ . "/nav.php" ?>
 <!-- enter your html -->

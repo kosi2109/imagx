@@ -1,4 +1,4 @@
-<?php $title = 'Admin Dashboard' ?>
+<?php $title = 'Time & Genre' ?>
 <?php require_once __DIR__ . "/../layouts/header.php" ?>
 <?php require_once __DIR__ . "/../nav.php" ?>
 <!-- enter your html -->

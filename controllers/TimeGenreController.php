@@ -9,6 +9,7 @@ class TimeGenreController
 {
     public function index()
     {
+        !is_admin() && redirectBack() ; 
         $times = new ShowTime();
         $genres = new Genre();
         $times = $times->getAll();
@@ -21,6 +22,7 @@ class TimeGenreController
 
     public function destroy ()
     {
+        !is_admin() && redirectBack() ; 
         $type = request('type');
         $id = request('id');
         if(!$type || !$id){
@@ -30,12 +32,12 @@ class TimeGenreController
         if($type == "time"){
             $time_md = new ShowTime();
             $time_md->delete($id);
-            $_SESSION['success'] = "Successfully Deleted";
+            setSuccess("Successfully Deleted");
             return redirectBack();
         }elseif($type == "genre"){
             $genre_md = new Genre();
             $genre_md->delete($id);
-            $_SESSION['success'] = "Successfully Deleted";
+            setSuccess("Successfully Deleted");
             return redirectBack();
         }else{
             setError("Can't delete");
@@ -46,6 +48,7 @@ class TimeGenreController
    
     public function update ()
     {
+        !is_admin() && redirectBack() ; 
         $type = request('type');
         $id = request('id');
         $newvalue = request('name');
@@ -56,12 +59,12 @@ class TimeGenreController
         if($type == "time"){
             $time_md = new ShowTime();
             $time_md->update($id,['show_time'=>$newvalue]);
-            $_SESSION['success'] = "Successfully Updated";
+            setSuccess("Successfully Updated");
             return redirectBack();
         }elseif($type == "genre"){
             $genre_md = new Genre();
             $genre_md->update($id,['genre'=>$newvalue]);
-            $_SESSION['success'] = "Successfully Updated";
+            setSuccess("Successfully Updated");
             return redirectBack();
         }else{
             setError("Can't update item");
@@ -72,6 +75,7 @@ class TimeGenreController
 
     public function store ()
     {
+        !is_admin() && redirectBack() ; 
         $type = request('type');
         $value = request('value');
         if(!$type || !$value){
@@ -81,12 +85,12 @@ class TimeGenreController
         if($type == "time"){
             $time_md = new ShowTime();
             $time_md->store(['show_time'=>$value]);
-            $_SESSION['success'] = "Successfully Added";
+            setSuccess("Successfully Added");
             return redirectBack();
         }elseif($type == "genre"){
             $genre_md = new Genre();
             $genre_md->store(['genre'=>$value]);
-            $_SESSION['success'] = "Successfully Added";
+            setSuccess("Successfully Added");
             return redirectBack();
         }else{
             setError("Can't Add");

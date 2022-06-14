@@ -12,6 +12,7 @@ class App
     {
         self::$pdo = $pdo;
     }
+    // boot app depend on uri and request
     public function boot() : void
     {
         $uri = uriParser($_SERVER["REQUEST_URI"]);
@@ -21,6 +22,7 @@ class App
         $route = new Route();
         $route::bild($uri,$_SERVER["REQUEST_METHOD"]);
     }
+    
     public static function getDbConnection ()
     {
         return self::$pdo;
