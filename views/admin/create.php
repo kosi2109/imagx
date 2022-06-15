@@ -120,8 +120,14 @@ $title = 'Create Movie' ?>
         }else{
             movie_img.setAttribute('type','file')
         }
-
     })
+
+    if(swit.checked){
+            movie_img.setAttribute('type','text')
+    }else{
+            movie_img.setAttribute('type','file')
+    }
+
 </script>
 
 <?php require_once __DIR__ . "/../layouts/footer.php" ?>
