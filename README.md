@@ -1,7 +1,7 @@
 
 # Imagx Cinema
 
-Cinema Booking App build with pure PHP and JavaScript .
+Cinema Booking App build on my own mini PHP framework and Vanilla JavaScript .
 
 
 ![cover](https://cdn.sanity.io/images/4c770ksx/production/fd1e3f95a5be207c5e6745486a0ae6b95ead1cfa-1366x768.png?w=1280)
